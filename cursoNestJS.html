@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Curso de NextJS 16</title>
+  <title>Curso de NestJS Back End</title>
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 
@@ -16,6 +16,7 @@
     <li><a href="cursoNestJS.html#referencia">Referencias</a></li>
     <li><a href="cursoNestJS.html#instalacion">Instalacion iniciales</a></li>
     <li><a href="cursoNestJS.html#estructura">estructura </a></li>
+    <li><a href="cursoNestJS.html#modulos">modulos </a></li>
     <li><a href="cursoNestJS.html#database">base de datos </a></li>
     <li><a href="cursoNestJS.html#convenciones">convenciones en base de datos </a></li>
     <li><a href="cursoNestJS.html#sgbd">Sistema de Gestin de Base de Datos (SGBD) </a></li>
@@ -117,6 +118,23 @@
         
       </code>
     </pre>
+    <strong>app.module.ts</strong>
+    <pre>
+      <code>
+        import { Module } from '@nestjs/common';
+        import { AppController } from './app.controller';
+        import { AppService } from './app.service';
+        
+        @Module({
+          imports: [],
+          controllers: [AppController],
+          providers: [AppService],
+        })
+        export class AppModule {}
+
+      </code>
+    </pre>
+
     <strong>app.controller.ts</strong>
     <pre>
       <code>
@@ -149,11 +167,11 @@
 
       </code>
     </pre>
-    <strong>app.module.ts</strong>
+    <strong>Nota</strong> <br>
+    si eliminamos el controller y el service y nos quedamos solamente con el module quedaria de la siguiente forma: <br>
     <pre>
       <code>
-        import { AppController } from './app.controller';
-        import { AppService } from './app.service';
+        import { Module } from '@nestjs/common';
         
         @Module({
           imports: [],
@@ -161,13 +179,45 @@
           providers: [AppService],
         })
         export class AppModule {}
-        import { Module } from '@nestjs/common';
 
       </code>
     </pre>
+    al ejecutarlo con <strong>npm run start:dev</strong> nos mostraria el siguiente error: <br>
+    status: 404 porque no encuenta la pagina que debe ser llamanda desde el controlador. <br>
+
   </article>
 
-</body>
+    <a href="cursoNestJS.html">⏫</a>
+  <hr />
+  <h2 id="modulos">modulos</h2>
+  <article>
+    Por convencion se recomienda que cada modulo exista en un carpeta idependiente en minuscula y en plural osea: <br>
+    <pre>
+      <code>
+        users/
+        orders/
+        products/
+        invoices/
+        roles/
+        permissions/
+
+      </code>
+    </pre>
+    exception  en singular por ser modulos conceptuales y no representan <strong>CRUD</strong> de la aplicacion
+    <pre>
+      <code>
+        auth/
+        config/
+        common/
+        health/
+
+      </code>
+    </pre>
+
+
+  </article>
+
+
 
   <a href="cursoNestJS.html">⏫</a>
   <hr />
@@ -398,4 +448,5 @@
 
   </article>
 
+</body>
 </html>
