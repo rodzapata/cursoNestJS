@@ -10,11 +10,15 @@
 </head>
 
 <body>
-  <h1>Curso de Nest JS </h1>
+  <h1>Curso de Nest JS  V11.0.14 </h1>
   <h2>Indice Tematico</h2>
   <ul>
     <li><a href="cursoNestJS.html#referencia">Referencias</a></li>
     <li><a href="cursoNestJS.html#instalacion">Instalacion iniciales</a></li>
+    <li><a href="cursoNestJS.html#estructura">estructura </a></li>
+    <li><a href="cursoNestJS.html#database">base de datos </a></li>
+    <li><a href="cursoNestJS.html#convenciones">convenciones en base de datos </a></li>
+    <li><a href="cursoNestJS.html#sgbd">Sistema de Gestin de Base de Datos (SGBD) </a></li>
   </ul>
 
 
@@ -22,8 +26,8 @@
   <hr />
   <h2 id="referencia">Referencias</h2>
   <article>
-    pagina de documentacion oficial <a href="https://docs.nestjs.com/" target="_blank" rel="noopener noreferrer">NestJS</a>
-
+    pagina de documentacion oficial <a href="https://docs.nestjs.com/" target="_blank" rel="noopener noreferrer">NestJS</a> <br>
+    curso de nestJS por Fazt <a href="https://www.youtube.com/watch?v=wsqcg5ZtUMM" target="_blank" rel="noopener noreferrer">curso por Fazt</a> <br>
 
   </article>
 
@@ -34,12 +38,364 @@
     empezaremos intalando el modulo a nivel general 
     <pre>
       <code>
-        $ npm i -g @nestjs/cli
+         npm i -g @nestjs/cli
+      </code>
+    </pre>
+    creamo el proyecto de NestJS llamado <strong>api-nest</strong>
+    <pre>
+      <code>
+        nest new api-nest
+      </code>
+    </pre>
+    entramo al proyecto, instalamos dependencias y ejecutamos el projecto
+    <pre>
+      <code>
+        cd api-nest 
+        npm install
+        npm run start
+      </code>
+    </pre>
+    en produccion se ejecuta con <strong>npm run start</strong> <br>
+    pero en desarrollo se ejectua con <strong>npm run start:dev </strong> <br><br>
+
+    Una vez instalado podemos ver los comando que nos permite trabajar, escribiendo <strong>nest</strong> <br>
+    <strong>new n</strong> genera un nuevo projecto de nest <br>
+    <strong>build</strong> compila nuestra aplicacion de nest <br>
+    <strong>start</strong> ejecuta e inicializa nuestra aplicacion <br>
+    <strong>info i</strong> muestra informacion <br>
+    <strong>add</strong> adiciona una libreria al proyecto <br>
+    <strong>generate g</strong> genera un nuevo elemento nest <br>
+
+    <pre>
+      <code>
+        ┌───────────────┬─────────────┬──────────────────────────────────────────────┐
+        │ name          │ alias       │ description                                  │
+        │ application   │ application │ Generate a new application workspace         │
+        │ class         │ cl          │ Generate a new class                         │
+        │ configuration │ config      │ Generate a CLI configuration file            │
+        │ controller    │ co          │ Generate a controller declaration            │
+        │ decorator     │ d           │ Generate a custom decorator                  │
+        │ filter        │ f           │ Generate a filter declaration                │
+        │ gateway       │ ga          │ Generate a gateway declaration               │
+        │ guard         │ gu          │ Generate a guard declaration                 │
+        │ interceptor   │ itc         │ Generate an interceptor declaration          │
+        │ interface     │ itf         │ Generate an interface                        │
+        │ library       │ lib         │ Generate a new library within a monorepo     │
+        │ middleware    │ mi          │ Generate a middleware declaration            │
+        │ module        │ mo          │ Generate a module declaration                │
+        │ pipe          │ pi          │ Generate a pipe declaration                  │
+        │ provider      │ pr          │ Generate a provider declaration              │
+        │ resolver      │ r           │ Generate a GraphQL resolver declaration      │
+        │ resource      │ res         │ Generate a new CRUD resource                 │
+        │ service       │ s           │ Generate a service declaration               │
+        │ sub-app       │ app         │ Generate a new application within a monorepo │
+        └───────────────┴─────────────┴──────────────────────────────────────────────┘
+
+      </code>  
+    </pre>  
+
+
+  </article>
+
+  <a href="cursoNestJS.html">⏫</a>
+  <hr />
+  <h2 id="estructura">Estructura Inicial</h2>
+  <article>
+    Estructura inicial esta compueta por <strong>main.ts</strong>, y <strong>app.controller.ts, app.service.ts, app.module.ts</strong> con los 
+    siguientes codigos : <br>
+    <strong>main.ts</strong>
+    <pre>
+      <code>
+        import { NestFactory } from '@nestjs/core';
+        import { AppModule } from './app.module';
+        
+        async function bootstrap() {
+          const app = await NestFactory.create(AppModule);
+          await app.listen(process.env.PORT ?? 3000);
+        }
+        bootstrap();
+        
+      </code>
+    </pre>
+    <strong>app.controller.ts</strong>
+    <pre>
+      <code>
+        import { Controller, Get } from '@nestjs/common';
+        import { AppService } from './app.service';
+        
+        @Controller()
+        export class AppController {
+          constructor(private readonly appService: AppService) {}
+        
+          @Get()
+          getHello(): string {
+            return this.appService.getHello();
+          }
+        }
+        
+      </code>
+    </pre>
+    <strong>app.service.ts</strong>
+    <pre>
+      <code>
+        import { Injectable } from '@nestjs/common';
+        
+        @Injectable()
+        export class AppService {
+          getHello(): string {
+            return 'Hello World! welcome NestJS';
+          }
+        }
+
+      </code>
+    </pre>
+    <strong>app.module.ts</strong>
+    <pre>
+      <code>
+        import { AppController } from './app.controller';
+        import { AppService } from './app.service';
+        
+        @Module({
+          imports: [],
+          controllers: [AppController],
+          providers: [AppService],
+        })
+        export class AppModule {}
+        import { Module } from '@nestjs/common';
+
       </code>
     </pre>
   </article>
 
-
 </body>
+
+  <a href="cursoNestJS.html">⏫</a>
+  <hr />
+  <h2 id="database">base de datos</h2>
+  <article>
+    curso de base de datos Postgres en linux para analitica de datos <a href="https://www.youtube.com/watch?v=5no6nDBLjSc" target="_blank" rel="noopener noreferrer">postgres en linux por camilo suarez</a> <br>
+    curso de base de datos por todoCoude <a href="https://www.youtube.com/watch?v=8N4M994IDt8" target="_blank" rel="noopener noreferrer">base de datos</a> <br>
+    curso de base de datos por SergieCode <a href="https://www.youtube.com/watch?v=Fca_kWJJXvo" target="_blank" rel="noopener noreferrer">mysql, postgres, para BackEnd</a> 
+  </article>
+
+  <a href="cursoNestJS.html">⏫</a>
+  <hr />
+  <h2 id="convenciones">convenciones en base de datos</h2>
+  <article>
+    <strong>convenciones para nombre de tablas y columnas</strong> <br>
+    <pre>
+      <code>
+        Nombres de tablas y columnas:
+        
+        Usa snake_case (ej: user_account, order_item).
+        Siempre en singular para tablas que representan entidades (user, product).
+        Evita abreviaturas poco claras.
+        
+        Esquemas:
+        
+        Usa esquemas para separar dominios (ej: auth.user, sales.order).
+        Mantén un esquema public solo para pruebas o datos comunes.
+        Define permisos por esquema para mayor seguridad.
+        
+        Llaves primarias y foráneas:
+        
+        Usa id como PK con tipo BIGSERIAL o UUID.
+        Nombra las FK con el patrón <tabla>_id (ej: user_id).
+        
+        Índices:
+        
+        Crea índices en columnas usadas en WHERE, JOIN y ORDER BY.
+        Usa índices únicos para garantizar integridad.
+        para los nombres se recomienda idx_<tabla>_<columnas>
+        para FK constraints se recomienda fk_<tabla>_<referencia>
+        unique se recomienda uq_<tabla>_<campo>
+        
+        Migraciones:
+        Siempre versiona cambios en la base de datos.
+        Documenta decisiones de diseño en cada migración.        
+
+      </code>
+    </pre>
+    un ejemplo de las esctructura de una base de datos en postgres seria: <br>
+    <pre>
+      <code>
+      </code>
+      -- Esquema para autenticación y usuarios
+      CREATE SCHEMA auth;
+      
+      CREATE TABLE auth.user (
+          id BIGSERIAL PRIMARY KEY,
+          email VARCHAR(255) UNIQUE NOT NULL,
+          password_hash TEXT NOT NULL,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+      
+      -- Esquema para catálogo de productos
+      CREATE SCHEMA catalog;
+      
+      CREATE TABLE catalog.product (
+          id BIGSERIAL PRIMARY KEY,
+          name VARCHAR(150) NOT NULL,
+          description TEXT,
+          price NUMERIC(10,2) NOT NULL,
+          stock INT DEFAULT 0,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+      
+      -- Esquema para ventas
+      CREATE SCHEMA sales;
+      
+      CREATE TABLE sales.order (
+          id BIGSERIAL PRIMARY KEY,
+          user_id BIGINT NOT NULL REFERENCES auth.user(id),
+          total NUMERIC(10,2) NOT NULL,
+          status VARCHAR(50) DEFAULT 'pending',
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+      
+      CREATE TABLE sales.order_item (
+          id BIGSERIAL PRIMARY KEY,
+          order_id BIGINT NOT NULL REFERENCES sales.order(id),
+          product_id BIGINT NOT NULL REFERENCES catalog.product(id),
+          quantity INT NOT NULL,
+          price NUMERIC(10,2) NOT NULL
+      );
+      
+    </pre>
+  <a href="cursoNestJS.html">⏫</a>
+  <hr />
+  <h2 id="sgbd">SGBD Sistema de Gestion de Base de Datos</h2>
+  <article>
+    Primero que todo hay que entender que Postgres en un sistemas de gestion multi proceso no multihilo. <br>
+    esto quiere de decir que el servidor esta escuchando y varios procesos estan corriendo solicitnao informacion, <br>
+    como una pagina hecha con Next, o  un administrador de DB como DBeaver, etc. <br>
+    por cada conexion se crea un servicio independiente para el sistema operativo, de tal forma que no interfiere unos con los otros, en cambio Mysql <br>
+    maneja una sola conexion con multiples hilos (multi-thread). <br>
+    ventajas de postgres, si un proceso falla no interfiere con los demas, en cambio en mysql si la conexion falla todos los procesos fallan, <br>
+    es por eso que postgres nececita mas memoria que mysql. <br><br>
+    <pre>
+      <code>
+        💡 Consejo de DBA: en aplicaciones modernas, para evitar saturar el servidor con demasiados procesos, 
+        se recomienda usar un connection pooler como PgBouncer o Pgpool-II, que gestionan las conexiones de manera más eficiente.        
+      </code>
+    </pre>
+    PostgreSQL es un motor cliente-servidor con arquitectura multi-proceso (no multi-thread).
+    <pre>
+      ┌───────────────────────┬──────────────────────────────────────┐
+      | Componente            | Función                              |
+      | --------------------- | ------------------------------------ |
+      | Postmaster            | Proceso padre, gestiona conexiones   |
+      | Backend process       | Un proceso por conexión              |
+      | Shared Buffers        | Caché de datos en memoria            |
+      | WAL (Write-Ahead Log) | Garantiza durabilidad                |
+      | Autovacuum            | Limpieza y estadísticas              |
+      | System Catalogs       | Metadatos (pg_class, pg_index, etc.) |
+      └───────────────────────┴──────────────────────────────────────┘
+
+      📌 Regla DBA:
+      
+      Si no entiendes WAL y Autovacuum, tarde o temprano tendrás problemas de rendimiento.
+            </code>
+      <code>
+    </pre>
+      
+      Roles y Seguridad (mucho más que “usuarios”) <br>
+    <pre>
+      <code>
+        En PostgreSQL NO existen usuarios, existen roles.
+        
+        Tipos de roles
+        Roles de login → personas / aplicaciones
+        Roles sin login → permisos
+
+      </code>
+    </pre>
+    Ejemplos profesional : <br>
+    <pre>
+      <code>
+        -- Rol base
+        CREATE ROLE app_read;
+        CREATE ROLE app_write;
+        
+        -- Usuario aplicación
+        CREATE ROLE app_user
+        LOGIN
+        PASSWORD '********';
+        
+        -- Asignación
+        GRANT app_read, app_write TO app_user;
+        
+        📌 Buenas prácticas
+        
+        ❌ No usar postgres en aplicaciones
+        ❌ No usar un solo usuario con todos los permisos
+        
+        ✅ Roles por responsabilidad
+        ✅ Principio de mínimo privilegio        
+      </code>
+    </pre>
+    PostgreSQL es 100% ACID : <br>
+    <pre>
+      <code>
+      🔑 ¿Qué es ACID?
+      ACID son las siglas de cuatro propiedades fundamentales que garantizan la fiabilidad de las transacciones en una base de datos:
+      
+      Atomicity (Atomicidad)
+      Una transacción se ejecuta completa o no se ejecuta en absoluto.
+      Ejemplo: si insertas un pedido y sus items, o se guardan todos o ninguno.
+      PostgreSQL asegura esto con su sistema de transacciones y rollback.
+      
+      Consistency (Consistencia)
+      Después de una transacción, la base de datos siempre pasa de un estado válido a otro estado válido.
+      Las reglas de integridad (constraints, foreign keys, triggers) garantizan que no queden datos corruptos.
+      Ejemplo: no puedes tener un order_item que apunte a un order inexistente.
+      
+      Isolation (Aislamiento)
+      Las transacciones concurrentes no interfieren entre sí.
+      PostgreSQL usa MVCC (Multi-Version Concurrency Control) para que cada transacción vea una “foto” consistente de los datos, sin bloquearse innecesariamente.
+      Ejemplo: dos usuarios pueden comprar productos al mismo tiempo sin pisarse los datos.
+      
+      Durability (Durabilidad)
+      Una vez confirmada (commit) la transacción, los datos quedan grabados de forma permanente, incluso si hay un fallo del sistema.
+      PostgreSQL usa WAL (Write-Ahead Logging) para asegurar que los cambios se registren primero en un log antes de aplicarse, lo que permite recuperación tras fallos.        
+
+      Ejemplo practico:
+      
+      BEGIN;
+      
+      INSERT INTO orders (...) VALUES (...);
+      INSERT INTO order_items (...) VALUES (...);
+      
+      COMMIT;
+      -- o
+      ROLLBACK;
+
+    </code>
+    </pre>
+    <strong>Relaciones y constraints (NO confíes en la aplicación) </strong>
+    <pre>
+      <code>
+        --ejemplo :
+
+        CREATE TABLE sales.order (
+            id BIGSERIAL PRIMARY KEY,
+            client_id BIGINT NOT NULL,
+            order_date DATE NOT NULL,
+        
+            CONSTRAINT fk_order_client
+                FOREIGN KEY (client_id)
+                REFERENCES sales.client(id)
+        );
+
+        📌 Reglas
+        SIEMPRE usa FK
+        SIEMPRE usa NOT NULL
+        SIEMPRE valida con constraints
+
+      </code>
+    </pre>
+  </article>
+
+  </article>
 
 </html>
