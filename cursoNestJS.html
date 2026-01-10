@@ -191,6 +191,37 @@
   <hr />
   <h2 id="modulos">modulos</h2>
   <article>
+    Los modulos son como contenederos que agrupan componentes realacionados como: <br>
+    controladores, servicios, proveedores, etc bajo el mismo contexto. <br>
+    ayuda al encansulamiento porque cada modulo es indepediente y organiza el codigo, permite <br>
+    la reutilizacion porque cada modulo puede exportar cierto servicios y componente evitando <br>
+    la duplicacion logica del codigo. <br>
+    permite la inyeccion de dependencia, permite compartir entre modulos. <br> 
+    Todo proyecto de nest tiene un <strong>AppModule</strong> (modulo raiz) que sirve como punto <br>
+    de entrada y donde se importa los demas modulos: <br>
+    <strong>Ejemplo basico de AppModule</strong>
+    <pre>
+      <code>
+        import { Module } from '@nestjs/common';
+        import { UsersController } from './users.controller';
+        import { UsersService } from './users.service';
+        
+        @Module({
+          controllers: [UsersController],
+          providers: [UsersService],
+          exports: [UsersService], // permite que otros módulos usen este servicio
+        })
+        export class UsersModule {}
+        
+        En este ejemplo:
+        
+        UsersController maneja las rutas relacionadas con usuarios.
+        UsersService contiene la lógica de negocio.
+        UsersModule agrupa todo y puede compartir el servicio con otros módulos.
+        
+        👉 En resumen: los módulos en NestJS son la columna vertebral de la arquitectura, permiten organizar, encapsular y escalar aplicaciones de manera limpia y modular.
+      </code>
+    </pre>
     Por convencion se recomienda que cada modulo exista en un carpeta idependiente en minuscula y en plural osea: <br>
     a excepcion de <strong>app</strong> que no debe estar en carpeta si en la parte externa de la aplicacion. <br>
 
