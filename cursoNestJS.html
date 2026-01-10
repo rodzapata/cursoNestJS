@@ -192,6 +192,8 @@
   <h2 id="modulos">modulos</h2>
   <article>
     Por convencion se recomienda que cada modulo exista en un carpeta idependiente en minuscula y en plural osea: <br>
+    a excepcion de <strong>app</strong> que no debe estar en carpeta si en la parte externa de la aplicacion. <br>
+
     <pre>
       <code>
         users/
@@ -213,7 +215,90 @@
 
       </code>
     </pre>
+    empezaremos creando una subcarpeta <strong>tasks</strong> donde crearemos nuestro modulo de tareas. <br>
+    dentro de la carpeta <strong>scr</strong> <br>
+    ejecutamos el comando : <br>
+    <pre>
+      <code>
+        
+        $ nest generate --help
+        Usage: nest generate|g [options] <schematic> [name] [path]
+        
+        Generate a Nest element.
+          Schematics available on @nestjs/schematics collection:
+            ┌───────────────┬─────────────┬──────────────────────────────────────────────┐
+            │ name          │ alias       │ description                                  │
+            │ application   │ application │ Generate a new application workspace         │
+            │ class         │ cl          │ Generate a new class                         │
+            │ configuration │ config      │ Generate a CLI configuration file            │
+            │ controller    │ co          │ Generate a controller declaration            │
+            │ decorator     │ d           │ Generate a custom decorator                  │
+            │ filter        │ f           │ Generate a filter declaration                │
+            │ gateway       │ ga          │ Generate a gateway declaration               │
+            │ guard         │ gu          │ Generate a guard declaration                 │
+            │ interceptor   │ itc         │ Generate an interceptor declaration          │
+            │ interface     │ itf         │ Generate an interface                        │
+            │ library       │ lib         │ Generate a new library within a monorepo     │
+            │ middleware    │ mi          │ Generate a middleware declaration            │
+            │ module        │ mo          │ Generate a module declaration                │
+            │ pipe          │ pi          │ Generate a pipe declaration                  │
+            │ provider      │ pr          │ Generate a provider declaration              │
+            │ resolver      │ r           │ Generate a GraphQL resolver declaration      │
+            │ resource      │ res         │ Generate a new CRUD resource                 │
+            │ service       │ s           │ Generate a service declaration               │
+            │ sub-app       │ app         │ Generate a new application within a monorepo │
+            └───────────────┴─────────────┴──────────────────────────────────────────────┘
+        
+        Options:
+          -d, --dry-run                      Report actions that would be taken without writing out results.
+          -p, --project [project]            Project in which to generate files.
+          --flat                             Enforce flat structure of generated element.
+          --no-flat                          Enforce that directories are generated.
+          --spec                             Enforce spec files generation. (default: true)
+          --spec-file-suffix [suffix]        Use a custom suffix for spec files.
+          --skip-import                      Skip importing (default: false)
+          --no-spec                          Disable spec files generation.
+          -c, --collection [collectionName]  Schematics collection to use.
+          -h, --help                         Output usage information.
+      </code>
+    </pre>
+    el codigo de nuestro modulo quedaria: <br>
+    <pre>
+      <code>
+        import { Module } from "@nestjs/common";
+        
+        @Module({})
+        export class TaskModule{
+        
+        }        
+      </code>
+    </pre>
+    ahora nuestro modulo TaskModule tenemos que importarlo desde app.module.ts : <br>
+    <pre>
+      <code>
+        import { Module } from '@nestjs/common';
+        import { AppController } from './app.controller';
+        import { AppService } from './app.service';
+        import { TaskModule } from './tasks/tasks.module';
+        
+        @Module({
+          imports: [TaskModule],
+          controllers: [AppController],
+          providers: [AppService],
+        })
+        export class AppModule {}
 
+
+      </code>
+    </pre>
+    por ejemplo si queremos crear un modulo <strong>project</strong> escribimos:
+    <pre>
+      <code>
+        nest g mo project
+      </code>
+    </pre>
+    y aumaticamente crea a carpeta <strong>project</strong> y crea project.module.ts, <tr>
+    ademas dentro de app.module.ts import el modulo creado </tr>
 
   </article>
 
