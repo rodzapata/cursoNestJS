@@ -17,6 +17,7 @@
     <li><a href="cursoNestJS.html#instalacion">Instalacion iniciales</a></li>
     <li><a href="cursoNestJS.html#estructura">estructura </a></li>
     <li><a href="cursoNestJS.html#modulos">modulos </a></li>
+    <li><a href="cursoNestJS.html#controller">controller </a></li>
     <li><a href="cursoNestJS.html#database">base de datos </a></li>
     <li><a href="cursoNestJS.html#convenciones">convenciones en base de datos </a></li>
     <li><a href="cursoNestJS.html#sgbd">Sistema de Gestin de Base de Datos (SGBD) </a></li>
@@ -333,7 +334,67 @@
 
   </article>
 
-
+  <a href="cursoNestJS.html">⏫</a>
+  <hr />
+  <h2 id="controller">controller</h2>
+  <article>
+    nuestro controllador base llamado <strong>tasks.controller.ts</strong> seria asi: <br>
+    <pre>
+      <code>
+        import { Controller } from "@nestjs/common";
+        
+        @Controller({})
+        export class TaskController{
+        
+        }        
+      </code>
+    </pre>
+    Notamos que el codigo es muy parecido al codigo de modulo, simplemente es una clase <br>
+    que se exporta y utiliza un decorador llamado controller, el cual debe ser importador inicialmente. <br>
+    Ahora este controller para ser utilizado debe ser agregado en nuesto <strong>task.module.controller.ts</strong> <br>
+    quedando de la siguiente forma: <br>
+    <pre>
+      <code>
+        import { Module } from "@nestjs/common";
+        import { TaskController } from "./tasks.controller";
+        
+        @Module({controllers:[TaskController]})
+        export class TaskModule{
+        
+        }        
+        
+      </code>  
+      dentro del objeto vacio que colocamos en nuestro modulo es donde se debe configurar el controlador, <br>
+      que vamos a utilizar <strong>{controllers:[TaskController]}</strong> y previamente debe ser importado
+    </pre>
+    ahora en nuestro controller es donde van a ir todas las rutas que son llamadas en los endpoint, <br>
+    por ahora devolveremos un simple mensaje de texto en nuestra ruta tasks, quedando asi: <br>
+    <pre>
+      <code>
+        import { Controller, Get } from "@nestjs/common";
+        
+        @Controller({})
+        export class TaskController{
+            @Get('/tasks')
+            getAllTasks(){
+                return 'Obteniendo todas las tareas'
+            }
+        }
+        
+      </code>
+    </pre>
+    ahora vamos hacer lo mismo pero de manera automatico en nuesta carpeta de prueba que la <br>
+    creamos de forma automatica si: <br>
+    <pre>
+      <code>
+        nest g co prueba
+      </code>
+    </pre>
+    con esto le decimos que nos cree un controlador dentro de la carpeta prueba y el <br>
+    hace todos los import y configuracion que hiciemos manual <br>
+    
+  
+  </article>
 
   <a href="cursoNestJS.html">⏫</a>
   <hr />
