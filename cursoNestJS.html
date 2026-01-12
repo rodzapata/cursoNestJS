@@ -10,7 +10,7 @@
 </head>
 
 <body>
-  <h1>Curso de Nest JS  V11.0.14 </h1>
+  <h1>Curso de Nest JS  V11.0.14 for BackEnd</h1>
   <h2>Indice Tematico</h2>
   <ul>
     <li><a href="cursoNestJS.html#referencia">Referencias</a></li>
@@ -18,6 +18,7 @@
     <li><a href="cursoNestJS.html#estructura">estructura </a></li>
     <li><a href="cursoNestJS.html#modulos">modulos </a></li>
     <li><a href="cursoNestJS.html#controller">controller </a></li>
+    <li><a href="cursoNestJS.html#service">service </a></li>
     <li><a href="cursoNestJS.html#database">base de datos </a></li>
     <li><a href="cursoNestJS.html#convenciones">convenciones en base de datos </a></li>
     <li><a href="cursoNestJS.html#sgbd">Sistema de Gestin de Base de Datos (SGBD) </a></li>
@@ -392,9 +393,89 @@
     </pre>
     con esto le decimos que nos cree un controlador dentro de la carpeta prueba y el <br>
     hace todos los import y configuracion que hiciemos manual <br>
-    
-  
+    pero tambien nos genero un archivo de testeo interno si no lo queremos debemos escribir:
+    <pre>
+      <code>
+        nest g co prueba --no-spec
+      </code>
+    </pre>
+ 
   </article>
+
+  <a href="cursoNestJS.html">⏫</a>
+  <hr />
+  <h2 id="service">service</h2>
+  <article>
+    dentro del service creamos la funcione que ejecuta toda la logica, los <strong>controler</strong>, simplemente <br>
+    muestra la ruta que debemos retornar, pero la logica debe estar en los service. <br>
+    <pre>
+      <code>
+        import { Injectable } from "@nestjs/common";
+        
+        @Injectable()
+        export class TaskService{
+        
+        }        
+
+      </code>
+    </pre>
+  podemos notar que la clase es parecida a la de modulo y a la de controladores, pero en este caso, <br>
+  se llama <strong>injectable</strong>, y en el decorador tampoco hay que inicializar un objeto vacio.  <br>
+  ahora dentro de la clase crearemos la funcion que me va a retorna un array : <br>
+  <pre>
+    <code>
+      import { Injectable } from "@nestjs/common";
+      
+      @Injectable()
+      export class TaskService{
+      
+          getTasks(){
+              return ["task1","task2","tasks3"]
+          }
+      }
+      
+    </code>
+  </pre>
+  ahora nuestro controller debe llamar a nuestro service y necesitamos crear un contructor el codigo es el <br>
+  siguiente: <br>
+  <pre>
+    <code>
+      import { Controller, Get } from "@nestjs/common";
+      import { TasksService } from "./tasks.service";
+      
+      @Controller({})
+      export class TaskController{
+          tasksService:TasksService;
+      
+          constructor(tasksService:TasksService){
+              this.tasksService=tasksService;
+          }
+          @Get('/tasks')
+          getAllTasks(){
+              return this.tasksService.getTasks();
+          }
+      }      
+      
+    </code>
+  </pre>
+  por ultimo para nuestro controlador sepa que va a utilizar un service lo debemos expecificar en el modulo: <br>
+  <pre>
+    <code>
+      import { Module } from "@nestjs/common";
+      import { TaskController } from "./tasks.controller";
+      import { TasksService } from "./tasks.service";
+      
+      
+      @Module({controllers:[TaskController], providers:[TasksService]})
+      export class TaskModule{
+      
+      }
+      
+    </code>  
+
+  </pre>
+  </article>
+
 
   <a href="cursoNestJS.html">⏫</a>
   <hr />
