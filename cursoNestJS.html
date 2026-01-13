@@ -10,7 +10,7 @@
 </head>
 
 <body>
-  <h1>Curso de Nest JS  V11.0.14 for BackEnd</h1>
+  <h1>Curso de Nest JS V11.0.14 for BackEnd</h1>
   <h2>Indice Tematico</h2>
   <ul>
     <li><a href="cursoNestJS.html#referencia">Referencias</a></li>
@@ -29,8 +29,10 @@
   <hr />
   <h2 id="referencia">Referencias</h2>
   <article>
-    pagina de documentacion oficial <a href="https://docs.nestjs.com/" target="_blank" rel="noopener noreferrer">NestJS</a> <br>
-    curso de nestJS por Fazt <a href="https://www.youtube.com/watch?v=wsqcg5ZtUMM" target="_blank" rel="noopener noreferrer">curso por Fazt</a> <br>
+    pagina de documentacion oficial <a href="https://docs.nestjs.com/" target="_blank"
+      rel="noopener noreferrer">NestJS</a> <br>
+    curso de nestJS por Fazt <a href="https://www.youtube.com/watch?v=wsqcg5ZtUMM" target="_blank"
+      rel="noopener noreferrer">curso por Fazt</a> <br>
 
   </article>
 
@@ -38,7 +40,7 @@
   <hr />
   <h2 id="instalacion">Instalacion Inicial</h2>
   <article>
-    empezaremos intalando el modulo a nivel general 
+    empezaremos intalando el modulo a nivel general
     <pre>
       <code>
          npm i -g @nestjs/cli
@@ -95,7 +97,7 @@
         └───────────────┴─────────────┴──────────────────────────────────────────────┘
 
       </code>  
-    </pre>  
+    </pre>
 
 
   </article>
@@ -104,7 +106,8 @@
   <hr />
   <h2 id="estructura">Estructura Inicial</h2>
   <article>
-    Estructura inicial esta compueta por <strong>main.ts</strong>, y <strong>app.controller.ts, app.service.ts, app.module.ts</strong> con los 
+    Estructura inicial esta compueta por <strong>main.ts</strong>, y <strong>app.controller.ts, app.service.ts,
+      app.module.ts</strong> con los
     siguientes codigos : <br>
     <strong>main.ts</strong>
     <pre>
@@ -189,7 +192,7 @@
 
   </article>
 
-    <a href="cursoNestJS.html">⏫</a>
+  <a href="cursoNestJS.html">⏫</a>
   <hr />
   <h2 id="modulos">modulos</h2>
   <article>
@@ -198,7 +201,7 @@
     ayuda al encansulamiento porque cada modulo es indepediente y organiza el codigo, permite <br>
     la reutilizacion porque cada modulo puede exportar cierto servicios y componente evitando <br>
     la duplicacion logica del codigo. <br>
-    permite la inyeccion de dependencia, permite compartir entre modulos. <br> 
+    permite la inyeccion de dependencia, permite compartir entre modulos. <br>
     Todo proyecto de nest tiene un <strong>AppModule</strong> (modulo raiz) que sirve como punto <br>
     de entrada y donde se importa los demas modulos: <br>
     <strong>Ejemplo basico de AppModule</strong>
@@ -238,7 +241,7 @@
 
       </code>
     </pre>
-    exception  en singular por ser modulos conceptuales y no representan <strong>CRUD</strong> de la aplicacion
+    exception en singular por ser modulos conceptuales y no representan <strong>CRUD</strong> de la aplicacion
     <pre>
       <code>
         auth/
@@ -331,7 +334,7 @@
       </code>
     </pre>
     y aumaticamente crea a carpeta <strong>project</strong> y crea project.module.ts, <tr>
-    ademas dentro de app.module.ts import el modulo creado </tr>
+      ademas dentro de app.module.ts import el modulo creado </tr>
 
   </article>
 
@@ -399,7 +402,7 @@
         nest g co prueba --no-spec
       </code>
     </pre>
- 
+
   </article>
 
   <a href="cursoNestJS.html">⏫</a>
@@ -419,10 +422,10 @@
 
       </code>
     </pre>
-  podemos notar que la clase es parecida a la de modulo y a la de controladores, pero en este caso, <br>
-  se llama <strong>injectable</strong>, y en el decorador tampoco hay que inicializar un objeto vacio.  <br>
-  ahora dentro de la clase crearemos la funcion que me va a retorna un array : <br>
-  <pre>
+    podemos notar que la clase es parecida a la de modulo y a la de controladores, pero en este caso, <br>
+    se llama <strong>injectable</strong>, y en el decorador tampoco hay que inicializar un objeto vacio. <br>
+    ahora dentro de la clase crearemos la funcion que me va a retorna un array : <br>
+    <pre>
     <code>
       import { Injectable } from "@nestjs/common";
       
@@ -436,29 +439,29 @@
       
     </code>
   </pre>
-  ahora nuestro controller debe llamar a nuestro service y necesitamos crear un contructor el codigo es el <br>
-  siguiente: <br>
+    ahora nuestro controller debe llamar a nuestro service y necesitamos crear un contructor el codigo es el <br>
+    siguiente: <br>
   <pre>
     <code>
       import { Controller, Get } from "@nestjs/common";
       import { TasksService } from "./tasks.service";
       
       @Controller({})
-      export class TaskController{
-          tasksService:TasksService;
+      export class TasksController {
+          tasksService: TasksService;
       
-          constructor(tasksService:TasksService){
-              this.tasksService=tasksService;
+          constructor(tasksService: TasksService) {
+              this.tasksService = tasksService;
           }
           @Get('/tasks')
-          getAllTasks(){
+          getAllTasks() {
               return this.tasksService.getTasks();
           }
       }      
       
     </code>
   </pre>
-  por ultimo para nuestro controlador sepa que va a utilizar un service lo debemos expecificar en el modulo: <br>
+    por ultimo para nuestro controlador sepa que va a utilizar un service lo debemos expecificar en el modulo: <br>
   <pre>
     <code>
       import { Module } from "@nestjs/common";
@@ -474,6 +477,40 @@
     </code>  
 
   </pre>
+  como podemos notar nuestro codigo de controller. esta algo verboso se puede mejorar así:
+  <pre>
+    <code>
+      import { Controller, Get } from "@nestjs/common";
+      import { TasksService } from "./tasks.service";
+      
+      @Controller('tasks')
+      export class TasksController {
+      
+          constructor(private readonly tasksService: TasksService) {
+
+          }
+          @Get()
+          getAllTasks() {
+              return this.tasksService.getTasks();
+          }
+      }
+      
+    </code>
+
+  </pre>
+  <strong>Nota de mejoria del codigo</strong> <br>
+  el controlador no debe tener un objeto vacio, sino la ruta principal del controlador <strong>tasks</strong>, esta ruta hay que quitarla, <br>
+  del <strong>get()</strong> porque tendriamos que escribirla por cada funcion que hagamos. <br>
+  con respecto al codigo anterior se cambio dentro del contructor una variable local quedando así: <br>
+  <strong>private readonly tasksService: TasksService</strong> y no hay inicializar nada ni que recibir el paso de una variable a 
+  otra local. este concepto se llama <strong>injection de dependencia simplificado</strong><br>
+
+  si queremos crear el servicio de forma automatica en nuestra carpeta de prueba seria:
+  <pre>
+    <code>
+      nest g s prueba --no-spec
+    </code>
+  </pre>
   </article>
 
 
@@ -481,9 +518,13 @@
   <hr />
   <h2 id="database">base de datos</h2>
   <article>
-    curso de base de datos Postgres en linux para analitica de datos <a href="https://www.youtube.com/watch?v=5no6nDBLjSc" target="_blank" rel="noopener noreferrer">postgres en linux por camilo suarez</a> <br>
-    curso de base de datos por todoCoude <a href="https://www.youtube.com/watch?v=8N4M994IDt8" target="_blank" rel="noopener noreferrer">base de datos</a> <br>
-    curso de base de datos por SergieCode <a href="https://www.youtube.com/watch?v=Fca_kWJJXvo" target="_blank" rel="noopener noreferrer">mysql, postgres, para BackEnd</a> 
+    curso de base de datos Postgres en linux para analitica de datos <a
+      href="https://www.youtube.com/watch?v=5no6nDBLjSc" target="_blank" rel="noopener noreferrer">postgres en linux por
+      camilo suarez</a> <br>
+    curso de base de datos por todoCoude <a href="https://www.youtube.com/watch?v=8N4M994IDt8" target="_blank"
+      rel="noopener noreferrer">base de datos</a> <br>
+    curso de base de datos por SergieCode <a href="https://www.youtube.com/watch?v=Fca_kWJJXvo" target="_blank"
+      rel="noopener noreferrer">mysql, postgres, para BackEnd</a>
   </article>
 
   <a href="cursoNestJS.html">⏫</a>
@@ -570,25 +611,28 @@
       );
       
     </pre>
-  <a href="cursoNestJS.html">⏫</a>
-  <hr />
-  <h2 id="sgbd">SGBD Sistema de Gestion de Base de Datos</h2>
-  <article>
-    Primero que todo hay que entender que Postgres en un sistemas de gestion multi proceso no multihilo. <br>
-    esto quiere de decir que el servidor esta escuchando y varios procesos estan corriendo solicitnao informacion, <br>
-    como una pagina hecha con Next, o  un administrador de DB como DBeaver, etc. <br>
-    por cada conexion se crea un servicio independiente para el sistema operativo, de tal forma que no interfiere unos con los otros, en cambio Mysql <br>
-    maneja una sola conexion con multiples hilos (multi-thread). <br>
-    ventajas de postgres, si un proceso falla no interfiere con los demas, en cambio en mysql si la conexion falla todos los procesos fallan, <br>
-    es por eso que postgres nececita mas memoria que mysql. <br><br>
-    <pre>
+    <a href="cursoNestJS.html">⏫</a>
+    <hr />
+    <h2 id="sgbd">SGBD Sistema de Gestion de Base de Datos</h2>
+    <article>
+      Primero que todo hay que entender que Postgres en un sistemas de gestion multi proceso no multihilo. <br>
+      esto quiere de decir que el servidor esta escuchando y varios procesos estan corriendo solicitnao informacion,
+      <br>
+      como una pagina hecha con Next, o un administrador de DB como DBeaver, etc. <br>
+      por cada conexion se crea un servicio independiente para el sistema operativo, de tal forma que no interfiere unos
+      con los otros, en cambio Mysql <br>
+      maneja una sola conexion con multiples hilos (multi-thread). <br>
+      ventajas de postgres, si un proceso falla no interfiere con los demas, en cambio en mysql si la conexion falla
+      todos los procesos fallan, <br>
+      es por eso que postgres nececita mas memoria que mysql. <br><br>
+      <pre>
       <code>
         💡 Consejo de DBA: en aplicaciones modernas, para evitar saturar el servidor con demasiados procesos, 
         se recomienda usar un connection pooler como PgBouncer o Pgpool-II, que gestionan las conexiones de manera más eficiente.        
       </code>
     </pre>
-    PostgreSQL es un motor cliente-servidor con arquitectura multi-proceso (no multi-thread).
-    <pre>
+      PostgreSQL es un motor cliente-servidor con arquitectura multi-proceso (no multi-thread).
+      <pre>
       ┌───────────────────────┬──────────────────────────────────────┐
       | Componente            | Función                              |
       | --------------------- | ------------------------------------ |
@@ -606,9 +650,9 @@
             </code>
       <code>
     </pre>
-      
+
       Roles y Seguridad (mucho más que “usuarios”) <br>
-    <pre>
+      <pre>
       <code>
         En PostgreSQL NO existen usuarios, existen roles.
         
@@ -618,8 +662,8 @@
 
       </code>
     </pre>
-    Ejemplos profesional : <br>
-    <pre>
+      Ejemplos profesional : <br>
+      <pre>
       <code>
         -- Rol base
         CREATE ROLE app_read;
@@ -642,8 +686,8 @@
         ✅ Principio de mínimo privilegio        
       </code>
     </pre>
-    PostgreSQL es 100% ACID : <br>
-    <pre>
+      PostgreSQL es 100% ACID : <br>
+      <pre>
       <code>
       🔑 ¿Qué es ACID?
       ACID son las siglas de cuatro propiedades fundamentales que garantizan la fiabilidad de las transacciones en una base de datos:
@@ -680,8 +724,8 @@
 
     </code>
     </pre>
-    <strong>Relaciones y constraints (NO confíes en la aplicación) </strong>
-    <pre>
+      <strong>Relaciones y constraints (NO confíes en la aplicación) </strong>
+      <pre>
       <code>
         --ejemplo :
 
@@ -702,9 +746,10 @@
 
       </code>
     </pre>
-  </article>
+    </article>
 
   </article>
 
 </body>
+
 </html>

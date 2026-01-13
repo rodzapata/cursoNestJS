@@ -1,9 +1,9 @@
 import { Injectable } from "@nestjs/common";
 
 @Injectable()
-export class TasksService{
+export class TasksService {
 
-    getTasks(){
-        return ["task1","task2","tasks3"]
+    getTasks() {
+        return ["task1", "task2", "task3"]
     }
 }
