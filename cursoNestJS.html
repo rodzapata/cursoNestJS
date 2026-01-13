@@ -19,6 +19,7 @@
     <li><a href="cursoNestJS.html#modulos">modulos </a></li>
     <li><a href="cursoNestJS.html#controller">controller </a></li>
     <li><a href="cursoNestJS.html#service">service </a></li>
+    <li><a href="cursoNestJS.html#https">https </a></li>
     <li><a href="cursoNestJS.html#database">base de datos </a></li>
     <li><a href="cursoNestJS.html#convenciones">convenciones en base de datos </a></li>
     <li><a href="cursoNestJS.html#sgbd">Sistema de Gestin de Base de Datos (SGBD) </a></li>
@@ -33,6 +34,8 @@
       rel="noopener noreferrer">NestJS</a> <br>
     curso de nestJS por Fazt <a href="https://www.youtube.com/watch?v=wsqcg5ZtUMM" target="_blank"
       rel="noopener noreferrer">curso por Fazt</a> <br>
+    plantilla recomedada para empezar un proyecto nuevo de nestJS <a href="https://www.youtube.com/watch?v=l--D8yslyUk" target="_blank" rel="noopener noreferrer">plantilla</a> <br>
+
 
   </article>
 
@@ -513,6 +516,88 @@
   </pre>
   </article>
 
+  <a href="cursoNestJS.html">⏫</a>
+  <hr />
+  <h2 id="https">https</h2>
+  <article>
+    los https se utilizan para manejar los diferentes metodos del CRUD <br>
+    la logica de negocio del service quedaria asi:
+    <pre>
+      <code>
+        import { Injectable } from "@nestjs/common";
+        
+        @Injectable()
+        export class TasksService {
+        
+            getTasks() {
+                return ["task1", "task2", "task3"]
+            }
+            
+            createTasks(){
+                return "create tasks" ;
+            }
+        
+            updateTasks(){
+                return "editar tarea";
+            }
+        
+            deleteTasks(){
+                return "eliminar tareas" ;
+            }
+        
+            updateTasksState(){
+                return "actualizando estado" ;
+            }
+        
+        
+        }
+        
+      </code>
+    </pre>
+    y el controlador que llama al servicio es donde vamos a importar los metodos get, put, post, delete, patch para <br>
+    luego llamar a nuestro servicio, el codigo del cotrolador seria : <br>
+    <pre>
+      <code>
+        import { Controller, Get, Post,Put,Delete,Patch } from "@nestjs/common";
+        import { TasksService } from "./tasks.service";
+        
+        @Controller('tasks')
+        export class TasksController {
+        
+            constructor(private readonly tasksService: TasksService) {
+        
+            }
+        
+            @Get()
+            getAllTasks() {
+                return this.tasksService.getTasks();
+            }
+        
+            @Post()
+            createTasks(){
+                return this.tasksService.createTasks();
+            }
+        
+            @Put()
+            updateTasks(){
+                return this.tasksService.updateTasks();
+            }
+        
+            @Delete()
+            deleteTasks(){
+                return this.tasksService.deleteTasks();
+            }
+        
+            @Patch()
+            updateTasksState(){
+                return this.tasksService.updateTasksState();
+            }
+        }
+        
+      </code>
+    </pre>
+
+  </article>
 
   <a href="cursoNestJS.html">⏫</a>
   <hr />
