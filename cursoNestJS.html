@@ -20,6 +20,8 @@
     <li><a href="cursoNestJS.html#controller">controller </a></li>
     <li><a href="cursoNestJS.html#service">service </a></li>
     <li><a href="cursoNestJS.html#https">https </a></li>
+    <li><a href="cursoNestJS.html#response">response </a></li>
+    <li><a href="cursoNestJS.html#requesBody">reques Body </a></li>
     <li><a href="cursoNestJS.html#database">base de datos </a></li>
     <li><a href="cursoNestJS.html#convenciones">convenciones en base de datos </a></li>
     <li><a href="cursoNestJS.html#sgbd">Sistema de Gestin de Base de Datos (SGBD) </a></li>
@@ -598,6 +600,163 @@
     </pre>
 
   </article>
+
+  <a href="cursoNestJS.html">⏫</a>
+  <hr />
+  <h2 id="response">response</h2>
+  <article>
+    En NestJS, Response normalmente se refiere al objeto de respuesta HTTP que proviene de Express (o Fastify, según el adaptador que uses). <br>
+    NestJS está construido sobre Express (por defecto) o Fastify. <br>
+    Cuando inyectas @Res() en un controlador, lo que recibes es el objeto Response de Express/Fastify. <br>
+    Este objeto te permite controlar manualmente la respuesta HTTP: enviar JSON, redirigir, establecer cabeceras, cookies, etc. <br>
+    un ejemplo con express seria: <br>
+    <pre>
+      <code>
+        import { Controller, Get, Res } from '@nestjs/common';
+        import { Response } from 'express';
+        
+        @Controller('tasks')
+        export class TasksController {
+          @Get()
+          getTasks(@Res() res: Response) {
+            const tasks = [{ id: 1, name: 'Test task' }];
+            res.status(200).json(tasks);
+          }
+        }
+        
+        
+      </code>
+    </pre>
+    pero segun las mejores practicas debe ser y NestJS se encarga de la conversion de json : <br>
+    <pre>
+      <code>
+        @Get()
+        getTasks() {
+          return [{ id: 1, name: 'Test task' }];
+        }
+        
+        
+      </code>
+    </pre>
+    Para JSON y respuestas normales, mejor retornar directamente y dejar que NestJS maneje todo. <br>
+    Para descargas, redirecciones o streams, usa @Res() porque necesitas control manual. <br>
+    <strong>ejemplo de descaga</strong>  <br>
+    <pre>
+      <code>
+        import { Controller, Get, Res } from '@nestjs/common';
+        import { Response } from 'express';
+        import { join } from 'path';
+        
+        @Controller('files')
+        export class FilesController {
+          @Get('download')
+          downloadFile(@Res() res: Response) {
+            const filePath = join(__dirname, '..', 'assets', 'example.pdf');
+            res.download(filePath, 'mi-archivo.pdf'); 
+          }
+        }
+        
+        
+      </code>
+    </pre>
+  </article>
+
+
+  <a href="cursoNestJS.html">⏫</a>
+  <hr />
+  <h2 id="requesBody">Reques Body</h2>
+  <article>
+    En NestJS, el request body es el contenido que envía el cliente dentro de una petición HTTP <br>
+    (normalmente en métodos POST, PUT o PATCH). Es la parte del mensaje donde se transmiten los datos que <br>
+    quieres procesar en tu servidor, por ejemplo un objeto JSON con información de una tarea, usuario, producto, etc. <br><br>
+    <strong>codigo task.controller.ts</strong> <br>
+    <pre>
+      <code>
+        import { Controller, Get, Post, Put, Delete, Patch, Body } from "@nestjs/common";
+        import { TasksService } from "./tasks.service";
+        
+        @Controller('tasks')
+        export class TasksController {
+        
+            constructor(private readonly tasksService: TasksService) {
+        
+            }
+        
+            @Get()
+            getAllTasks() {
+                return this.tasksService.getTasks();
+            }
+        
+            @Post()
+            createTasks(@Body() task: any) {
+                return this.tasksService.createTask(task);
+            }
+        
+            @Put()
+            updateTasks() {
+                return this.tasksService.updateTask();
+            }
+        
+            @Delete()
+            deleteTasks() {
+                return this.tasksService.deleteTask();
+            }
+        
+            @Patch()
+            updateTasksState() {
+                return this.tasksService.updateTaskState();
+            }
+        }        
+
+      </code>
+    </pre>
+    utilizamos el decorador @Body(), el cual es importado desde @nestjs/common, y lo pasamo como parametro al servicio <br>
+    <strong>codigo task.service.ts</strong> <br>
+    <pre>
+      <code>
+        
+        import { Injectable } from "@nestjs/common";
+        
+        export interface Task {
+            id: number,
+            description: string,
+            state: boolean
+        }
+        
+        
+        @Injectable()
+        export class TasksService {
+            private tasks: Task[] = [];
+        
+            getTasks(): Task[] {
+        
+                return this.tasks
+            }
+        
+            createTask(task: any) {
+                console.log(task);
+                this.tasks.push(task);
+                return this.tasks;
+            }
+        
+            updateTask() {
+                return "editar tarea";
+            }
+        
+            deleteTask() {
+                return "eliminar tareas";
+            }
+        
+            updateTaskState() {
+                return "actualizando estado";
+            }
+        }      
+          
+      </code>
+    </pre>
+
+  </article>
+
 
   <a href="cursoNestJS.html">⏫</a>
   <hr />

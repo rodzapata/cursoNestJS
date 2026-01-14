@@ -1,27 +1,37 @@
 import { Injectable } from "@nestjs/common";
 
+export interface Task {
+    id: number,
+    description: string,
+    state: boolean
+}
+
+
 @Injectable()
 export class TasksService {
+    private tasks: Task[] = [];
 
-    getTasks() {
-        return ["task1", "task2", "task3"]
-    }
-    
-    createTasks(){
-        return "create tasks" ;
+    getTasks(): Task[] {
+
+        return this.tasks
     }
 
-    updateTasks(){
+    createTask(task: any) {
+        console.log(task);
+        this.tasks.push(task);
+        return this.tasks;
+    }
+
+    updateTask() {
         return "editar tarea";
     }
 
-    deleteTasks(){
-        return "eliminar tareas" ;
+    deleteTask() {
+        return "eliminar tareas";
     }
 
-    updateTasksState(){
-        return "actualizando estado" ;
+    updateTaskState() {
+        return "actualizando estado";
     }
-
 
 }
