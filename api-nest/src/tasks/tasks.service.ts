@@ -1,11 +1,5 @@
 import { Injectable } from "@nestjs/common";
-
-export interface Task {
-    id: number,
-    description: string,
-    state: boolean
-}
-
+import { Task } from "./interfaces/tasks.interface";
 
 @Injectable()
 export class TasksService {
@@ -19,7 +13,7 @@ export class TasksService {
     createTask(task: any) {
         console.log(task);
         this.tasks.push(task);
-        return this.tasks;
+        return task;
     }
 
     updateTask() {
