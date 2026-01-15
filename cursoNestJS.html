@@ -22,6 +22,8 @@
     <li><a href="cursoNestJS.html#https">https </a></li>
     <li><a href="cursoNestJS.html#response">response </a></li>
     <li><a href="cursoNestJS.html#requesBody">reques Body </a></li>
+    <li><a href="cursoNestJS.html#params">params</a></li>
+    <li><a href="cursoNestJS.html#dto">dto </a></li>
     <li><a href="cursoNestJS.html#database">base de datos </a></li>
     <li><a href="cursoNestJS.html#convenciones">convenciones en base de datos </a></li>
     <li><a href="cursoNestJS.html#sgbd">Sistema de Gestin de Base de Datos (SGBD) </a></li>
@@ -804,6 +806,75 @@
     </pre>
   </article>
 
+  <a href="cursoNestJS.html">⏫</a>
+  <hr />
+  <h2 id="params">Query y params</h2>
+  <article>
+    como pasamos los parametros dentro de la URL. por ejemlo si yo quiero una ruta asi: <br>
+    <pre>
+      <code>
+        http://localhost:3000/tasks?limit=2        
+      </code>
+    </pre>
+    que nos indica que al consultar las tasks solo quiero que me muestre 2 y no todas las tareas <br>
+    <strong>codigo en el controlador</strong> <br>
+    <pre>
+      <code>
+        @Get()
+        getAllTasks(@Query() query: any) {
+            console.log(query);
+            return this.tasksService.getTasks();
+        }
+        
+        
+      </code>
+    </pre>
+    ahora queremos pasarle un parametro osea que la URL se mas asi:
+    <pre>
+      <code>
+        http://localhost:3000/tasks/1        
+      </code>
+    </pre>
+    para que me muestre la tarea 1 o cualquier numero que se pase como parametro. <br>
+    <strong>codigo en el controlador</strong>
+    <pre>
+      <code>
+        @Get("/:id")
+        getTask(@Param("id") id: string) {
+            console.log(id);
+            return this.tasksService.getTask(parseInt(id));
+    
+        }
+        
+        
+      </code>
+    </pre>
+    y dentro del servicio se recibe el parametro quedando así:
+    <pre>
+      <code>
+        getTask(id: number): Task | undefined {
+            console.log("parametro = ", id)
+            const taskFound = this.tasks.find(task => task.id === id)
+    
+            if (!taskFound) {
+               throw new NotFoundException(`Task with id ${id} not found`);
+            }
+    
+            return taskFound;
+        }
+        
+      </code>
+    </pre>
+
+  </article>
+
+  <a href="cursoNestJS.html">⏫</a>
+  <hr />
+  <h2 id="dto">dto</h2>
+  <article>
+    <strong>dto</strong>, son los utilizado para transferir datos entre capas. <br>
+
+  </article>
 
   <a href="cursoNestJS.html">⏫</a>
   <hr />
