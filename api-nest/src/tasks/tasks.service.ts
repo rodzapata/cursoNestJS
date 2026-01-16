@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { Task } from "./interfaces/tasks.interface";
+import { CreateTaskDto } from "./dto/create-task.dto";
 
 @Injectable()
 export class TasksService {
@@ -21,7 +22,7 @@ export class TasksService {
         return taskFound;
     }
 
-    createTask(task: any) {
+    createTask(task: CreateTaskDto) {
         console.log(task);
         this.tasks.push(task);
         return task;

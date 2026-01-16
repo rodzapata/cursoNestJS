@@ -24,6 +24,7 @@
     <li><a href="cursoNestJS.html#requesBody">reques Body </a></li>
     <li><a href="cursoNestJS.html#params">params</a></li>
     <li><a href="cursoNestJS.html#dto">dto </a></li>
+    <li><a href="cursoNestJS.html#validaciones">validaciones en el dto </a></li>
     <li><a href="cursoNestJS.html#database">base de datos </a></li>
     <li><a href="cursoNestJS.html#convenciones">convenciones en base de datos </a></li>
     <li><a href="cursoNestJS.html#sgbd">Sistema de Gestin de Base de Datos (SGBD) </a></li>
@@ -873,8 +874,87 @@
   <h2 id="dto">dto</h2>
   <article>
     <strong>dto</strong>, son los utilizado para transferir datos entre capas. <br>
+    creamos las carpeta <strong>dto</strong> y dentro de ella los archivos <strong>create-task.dto.ts</strong> y para las actualizaciones <br>
+    <strong>update-task.dto.ts</strong> con los siguientes codigos corrrespondiente:
+    <pre>
+      <code>
+        export class CreateTaskDto {
+            id: number
+            description: string
+            state: boolean
+        }
+
+      </code>
+    </pre>
+    y el codigo de actualizacion seria: <br>
+    <pre>
+      <code>
+        export class UpdateTaskDto {
+            description?: string
+            state?: boolean
+        }
+        
+        
+      </code>
+    </pre>
+    Notese que el codigo es muy parecido la diferencias seria en que en la actualizacion los campos son opcionales por eso es que se usa el signo <strong>?</strong> <br>
 
   </article>
+
+  <a href="cursoNestJS.html">⏫</a>
+  <hr />
+  <h2 id="validaciones">validaciones</h2>
+  <article>
+    En NestJS las validaciones se implementan principalmente con ValidationPipe y las librerías <strong>class-validator</strong> y 
+    <strong>class-transformer</strong>. <br>
+    Se definen reglas en los DTOs con decoradores, y el pipe se encarga de verificar automáticamente los datos entrantes. <br>
+    Para trabajar con las validaciones inicialmente hay que instalar las librerias asi: <br>
+    <pre>
+      <code>
+        npm install class-validator class-transformer
+        
+        
+      </code>
+    </pre>
+    codigo de validacion dentro del dto de crear tarea: <br>
+    <pre>
+      <code>
+        import { IsBoolean, IsNotEmpty, IsNumber, IsString, MinLength } from "class-validator"
+        
+        export class CreateTaskDto {
+            @IsNumber()
+            id: number
+        
+            @IsString()
+            @IsNotEmpty()
+            @MinLength(10)
+            description: string
+        
+            @IsBoolean()
+            state: boolean
+        }
+
+      </code>
+    </pre>
+    para que la validacion se aplique de forma global hay que importar <strong>ValidationPipe</strong> dentro del <strong>main.ts</strong> <br>
+    <pre>
+      <code>
+        import { NestFactory } from '@nestjs/core';
+        import { AppModule } from './app.module';
+        import { ValidationPipe } from '@nestjs/common';
+        
+        async function bootstrap() {
+          const app = await NestFactory.create(AppModule);
+          app.useGlobalPipes(new ValidationPipe());
+          await app.listen(process.env.PORT ?? 3000);
+        }
+        bootstrap();
+        
+        
+      </code>
+    </pre>
+  </article>
+
 
   <a href="cursoNestJS.html">⏫</a>
   <hr />
