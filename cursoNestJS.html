@@ -26,6 +26,7 @@
     <li><a href="cursoNestJS.html#dto">dto </a></li>
     <li><a href="cursoNestJS.html#validaciones">validaciones en el dto </a></li>
     <li><a href="cursoNestJS.html#pipeline">pipe line</a></li>
+    <li><a href="cursoNestJS.html#guards">guards</a></li>
     <li><a href="cursoNestJS.html#database">base de datos </a></li>
     <li><a href="cursoNestJS.html#convenciones">convenciones en base de datos </a></li>
     <li><a href="cursoNestJS.html#sgbd">Sistema de Gestin de Base de Datos (SGBD) </a></li>
@@ -41,6 +42,10 @@
     curso de nestJS por Fazt <a href="https://www.youtube.com/watch?v=wsqcg5ZtUMM" target="_blank"
       rel="noopener noreferrer">curso por Fazt</a> <br>
     plantilla recomedada para empezar un proyecto nuevo de nestJS <a href="https://www.youtube.com/watch?v=l--D8yslyUk" target="_blank" rel="noopener noreferrer">plantilla</a> <br>
+    <a href="https://www.youtube.com/watch?v=0OnSAqiuUKc&list=PLCKuOXG0bPi2DJQIRNwOIUJ_vO3l5s1b-" target="_blank" rel="noopener noreferrer">NestJs por Fernado Herrera</a> <br>
+    Tambien enconcre otro del mismo autora <a href="https://www.youtube.com/watch?v=w9TSbbhMsxo&list=PLCKuOXG0bPi1_cUC7-MDJnXChVLqJydBE" target="_blank" rel="noopener noreferrer">NestJs + graphql</a> <br>
+    
+
 
 
   </article>
@@ -964,13 +969,116 @@
     Este pipeline está compuesto por middlewares, guards, interceptors, pipes y filters. <br>
     Los pipes son una parte clave: sirven para transformar y validar los datos que entran a tu aplicación. <br><br>
     
+    Por ejemplo si creamos una funcion <strong>token</strong> que recibe un numero  y retorno otro sumado 10, quedaria así;
     <pre>
       <code>
+        import { Controller, Get, Post, Put, Delete, Patch, Body, Query, Param, ParseIntPipe } from "@nestjs/common";
 
+
+        @Get('ticket/:num')
+        getToken(@Param("num", ParseIntPipe) num: number){
+            console.log(num);
+            return num+10;
+    
+        }
+            
+      </code>
+    </pre>
+    y para probarlo escribimos: <br>
+    <pre>
+      <code>
+        http://localhost:3000/tasks/ticket/2        
+      </code>
+    </pre>
+
+  </article>
+
+  <a href="cursoNestJS.html">⏫</a>
+  <hr />
+  <h2 id="guards">Guards </h2>
+  <article>
+    un Guard es una clase que decide si una petición puede acceder a un controlador o ruta. <br>
+    Se usa principalmente para autenticación y autorización, verificando permisos, roles o condiciones antes de ejecutar el método del controlador <br><br>
+    <strong>Ejemplo basico de Guards</strong> <br>
+    <pre>
+      <code>
+        import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
+        import { Observable } from 'rxjs';
+        
+        @Injectable()
+        export class AuthGuard implements CanActivate {
+          canActivate(
+            context: ExecutionContext,
+          ): boolean | Promise&lt;boolean> | Observable&lt;boolean> {
+            const request = context.switchToHttp().getRequest();
+            return request.headers.authorization === 'Bearer miToken';
+          }
+        }
+        
         
       </code>
     </pre>
+    <strong>En el controlador del tasks seria:</strong> <br>
+    <pre>
+      <code>
+        import { AuthGuard } from "./guards/auth/auth.guard";
+        
+        @UseGuards(AuthGuard)
+        @Get()
+        getAllTasks(@Query() query: any) {
+            console.log(query);
+            return this.tasksService.getTasks();
+        }
+        
+        
+      </code>
+    </pre>
+    Ejemplo practico validaremos No permitir acceder a un endpoint si el request no tiene el header Authorization o si el token es incorrecto. <br>
+    creamos un guards dentro de nuestro endpont de taks con el siguiente comando:
+    <pre>
+      <code>
+        nest g guard tasks/guards/auth
+      </code>
+    </pre>
+    esto genera el siguiente codigo : <br>
+    <pre>
+      <code>
+        import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+        import { Observable } from 'rxjs';
+        
+        @Injectable()
+        export class AuthGuard implements CanActivate {
+          canActivate(
+            context: ExecutionContext,
+          ): boolean | Promise<boolean> | Observable<boolean> {
+            return true;
+          }
+        }
+       
+        
+      </code>
+    </pre>
+    si desde el navegadora colocamos la direccion : <br>
+    <pre>
+      <code>
+        http://localhost:3000/tasks
+        
+        {
+        message: "Forbidden resource",
+        error: "Forbidden",
+        statusCode: 403
+        }
+        
+      </code>
+    </pre>
+    porque no se le ha pasado la utorizacion en el encabezad desde el navegador seria:
+    <pre>
+      <code>
+        http://localhost:3000/tasks \  -H "Authorization: Bearer miToken"
+      </code>
+    </pre>
   </article>
+
 
   <a href="cursoNestJS.html">⏫</a>
   <hr />
