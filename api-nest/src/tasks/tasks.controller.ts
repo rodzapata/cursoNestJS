@@ -9,7 +9,7 @@ export class TasksController {
     constructor(private readonly tasksService: TasksService) {
 
     }
-    @UseGuards(AuthGuard)
+    //@UseGuards(AuthGuard)
     @Get()
     getAllTasks(@Query() query: any) {
         console.log(query);

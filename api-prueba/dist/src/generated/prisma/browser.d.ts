@@ -1,0 +1,15 @@
+import * as Prisma from './internal/prismaNamespaceBrowser.js';
+export { Prisma };
+export * as $Enums from './enums.js';
+export * from './enums.js';
+export type prov = Prisma.provModel;
+export type audit_log = Prisma.audit_logModel;
+export type county = Prisma.countyModel;
+export type customer = Prisma.customerModel;
+export type invoice = Prisma.invoiceModel;
+export type permission = Prisma.permissionModel;
+export type role = Prisma.roleModel;
+export type role_permission = Prisma.role_permissionModel;
+export type state = Prisma.stateModel;
+export type user = Prisma.userModel;
+export type user_role = Prisma.user_roleModel;

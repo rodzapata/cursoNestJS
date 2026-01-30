@@ -30,6 +30,7 @@
     <li><a href="cursoNestJS.html#database">base de datos </a></li>
     <li><a href="cursoNestJS.html#convenciones">convenciones en base de datos </a></li>
     <li><a href="cursoNestJS.html#sgbd">Sistema de Gestin de Base de Datos (SGBD) </a></li>
+    <li><a href="cursoNestJS.html#prisma-install">prisma ORM </a></li>
   </ul>
 
 
@@ -47,6 +48,10 @@
     Tambien enconcre otro del mismo autora <a href="https://www.youtube.com/watch?v=w9TSbbhMsxo&list=PLCKuOXG0bPi1_cUC7-MDJnXChVLqJydBE" target="_blank" rel="noopener noreferrer">NestJs + graphql</a> <br>
     autonteticacion , JWT y Prisma<a href="https://www.youtube.com/watch?v=AtTBylnIocw" target="_blank" rel="noopener noreferrer">programacion ya</a> <br>
     curso de nestJS con TypeORM <a href="https://www.youtube.com/watch?v=Z6G7mCAeXoE" target="_blank" rel="noopener noreferrer">Nest con TypeORM por Bluuweb</a> <br>
+    <a href="https://www.youtube.com/watch?v=RWUmlsdZ1e4&list=PLPl81lqbj-4LqA6sXRETXUg4uNkYG4aUc" target="_blank" rel="noopener noreferrer">Nest api rest con typeORM por Blueweb</a><br>
+    <a href="https://www.youtube.com/watch?v=w9TSbbhMsxo&list=PLCKuOXG0bPi1_cUC7-MDJnXChVLqJydBE&index=1" target="_blank" rel="noopener noreferrer">Nest + graphQl por Fernando Herrera</a> <br>
+    <a href="https://www.youtube.com/watch?v=HLoTP_ZBEY4" target="_blank" rel="noopener noreferrer">NestJS - Episodio I: Creando una API Rest + PostgreSQL + Prisma + Swagge por Medieval script</a> <br>
+    <a href="https://www.youtube.com/watch?v=VvrVPrifRUw" target="_blank" rel="noopener noreferrer">Prisma 7</a> <br>
     
 
   </article>
@@ -882,6 +887,13 @@
   <article>
     <strong>dto</strong>, son los utilizado para transferir datos entre capas. <br>
     creamos las carpeta <strong>dto</strong> y dentro de ella los archivos <strong>create-task.dto.ts</strong> y para las actualizaciones <br>
+    en update-task-dto.ts en la version de recurso genera un clase parcial y hay que tener instalado : <br>
+    <pre>
+      <code>
+        npm install @nestjs/mapped-types
+        
+      </code>
+    </pre>
     <strong>update-task.dto.ts</strong> con los siguientes codigos corrrespondiente:
     <pre>
       <code>
@@ -1315,6 +1327,229 @@
     </pre>
     </article>
 
+  </article>
+    <a href="cursoNestJS.html">⏫</a>
+  <hr />
+  <h2 id="prisma-install">prisma ORM</h2>
+  <article>
+    Empezamos instalando el prima: <br>
+    <strong>1. Crear el proyecto NestJS</strong> <br>
+    <pre>
+      <code>
+        npm i -g @nestjs/cli
+        nest new api-backend
+        cd api-backend
+      </code>
+        
+    </pre>
+    <strong>2. Instalamoas Prisma ORM en el proyecto</strong> <br>
+    <pre>
+      <code>
+        npm install prisma @prisma/client
+        npm install prisma --save-dev        
+        npx prisma init
+      </code>
+    </pre>
+    Esto crea:
+    
+    prisma/schema.prisma <br>
+    .env <br><br>
+    <strong>Nota</strong> <br>
+    <pre>
+      <code>
+        si ejecutamos :
+        npm install prisma -D
+        en ves de :
+        npm install prisma @prisma/client
+
+      </code>
+    </pre>
+    el codigo recomendado segun las mejores practicas en <strong>schema.prisma</strong> es: <br>
+    pero no se porque no lo genera así: <br>
+    <pre>
+      <code>
+        generator client {
+          provider = "prisma-client-js"
+        }
+        
+        datasource db {
+          provider = "postgresql"
+          url      = env("DATABASE_URL")
+        }
+        
+      </code>
+    </pre>
+      A partir de la version 7 esto cambia y la configuracion correcta es : <br>
+      <pre>
+        <code>
+          generator client {
+            provider     = "prisma-client"
+            output       = "../src/generated/prisma"
+            moduleFormat = "cjs"
+          }
+          
+          datasource db {
+            provider = "postgresql"
+          }
+
+        </code>
+      </pre>
+      Tambien ahora a partir de la version 7 aparece un archivo llamado <strong>prisma.config.ts</strong> que debe llevar lo siguiente: <br>
+      <pre>
+        <code>
+          import "dotenv/config";
+          import { defineConfig } from "prisma/config";
+          
+          export default defineConfig({
+            schema: "prisma/schema.prisma",
+            migrations: {
+              path: "prisma/migrations",
+            },
+            datasource: {
+              url: process.env["DATABASE_URL"],
+            },
+          });
+          
+          
+        </code>
+      </pre>
+      <strong>Nota</strong> <br>
+      la primera linea del import dotenv tuve que escribirla manual sin esa linea no reconoce la cadena de conexion que se guarda en <strong>.nev</strong> <br>
+      
+    <strong>3. Configurar conexión a tu BD existente</strong> dentro de .env <br>
+    <pre>
+      <code>
+        DATABASE_URL="postgresql://postgres:Clave01.@localhost:5432/supplier?schema=public"
+        
+      </code>
+    </pre>
+    <strong>4. Importar la estructura de tu base existente (sin borrar datos)</strong><br>
+    <pre>
+      <code>
+    ⚠️ IMPORTANTE: No uses <strong>prisma migrate dev</strong> porque eso puede alterar la BD.
+
+    En su lugar usa:    
+      npx prisma db pull  
+      </code>
+    </pre>
+    instalamos e adapter de postgresql <br>
+    <pre>
+      <code>
+        npm install @prisma/adapter-pg
+        
+      </code>
+    </pre>
+    podemos validar si la configuracion del prisma db pull esta correcto: <br>
+    <pre>
+      <code>
+        npx prisma validate       
+      </code>
+    </pre>
+    <strong>5. Generar el cliente Prisma</strong><br>
+    <pre>
+      <code>
+        npx prisma generate
+        
+      </code>
+    </pre>
+
+    <strong>6. Crear módulo Prisma en NestJS</strong><br>
+    <pre>
+      <code>
+        nest g module prisma
+        nest g service prisma
+       
+      </code>
+    </pre>
+    editamos prisma.service.ts <br>
+    <pre>
+      <code>
+        import "dotenv/config";
+        import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
+        import { PrismaClient } from 'src/generated/prisma/client';
+        import { PrismaPg } from '@prisma/adapter-pg';
+        
+        @Injectable()
+        export class PrismaService extends PrismaClient implements OnModuleInit {
+            constructor() {
+                const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
+                super({ adapter });
+            }
+            async onModuleInit() {
+                try {
+                    await this.$queryRaw`select 1`;
+                    Logger.log(`Database Conection established`);
+        
+                } catch (error) {
+                    Logger.error(`Conection failed`);
+                    throw error;
+                }
+            }
+        
+        }
+        
+      </code>
+    </pre>
+    el codigo refactorizado de prisma.service.ts es : <br>
+    <pre>
+      <code>
+        import "dotenv/config";
+        import { Injectable, Logger, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
+        import { PrismaClient, Prisma } from 'src/generated/prisma/client';
+        import { PrismaPg } from '@prisma/adapter-pg';
+        
+        @Injectable()
+        export class PrismaService
+          extends PrismaClient
+          implements OnModuleInit, OnModuleDestroy
+        {
+          private readonly logger = new Logger(PrismaService.name);
+        
+          constructor() {
+            const databaseUrl = process.env.DATABASE_URL;
+        
+            if (!databaseUrl) {
+              throw new Error('DATABASE_URL is not defined');
+            }
+        
+            const adapter = new PrismaPg({ connectionString: databaseUrl });
+        
+            super({
+              adapter,
+              log: ['error', 'warn'],
+            });
+          }
+        
+          async onModuleInit(): Promise<void> {
+            try {
+              await this.$connect();
+              this.logger.log('Database connection established');
+            } catch (error) {
+              this.logger.error('Database connection failed', error);
+              throw error;
+            }
+          }
+        
+          async onModuleDestroy(): Promise<void> {
+            await this.$disconnect();
+            this.logger.log('Database connection closed');
+          }
+        }
+        
+
+        
+      </code>
+    </pre>
+
+    <strong>nota</strong> <br>
+    cuando agregue una tabla al schema y no se reflejaba en la base de datos me funciono escribiendo el comando :
+    <pre>
+      <code>
+        npx prisma db push
+        
+      </code>
+    </pre>
+    
   </article>
 
 </body>

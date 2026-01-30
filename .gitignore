@@ -23,3 +23,5 @@ obj/
 # Ignorar IDEs (VSCode, IntelliJ, etc.)
 .vscode/
 .idea/
+
+/generated/prisma
