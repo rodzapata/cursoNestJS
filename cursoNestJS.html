@@ -33,6 +33,7 @@
     <li><a href="cursoNestJS.html#sgbd">Sistema de Gestin de Base de Datos (SGBD) </a></li>
     <li><a href="cursoNestJS.html#prisma-install">prisma ORM </a></li>
     <li><a href="cursoNestJS.html#prisma-modelo">prisma Modelo </a></li>
+    <li><a href="cursoNestJS.html#migraciones">migraciones </a></li>
   </ul>
 
 
@@ -42,6 +43,7 @@
   <article>
     pagina de documentacion oficial <a href="https://docs.nestjs.com/" target="_blank"
       rel="noopener noreferrer">NestJS</a> <br>
+    Documentacion oficial de prisma ORM <a href="https://www.prisma.io/" target="_blank" rel="noopener noreferrer">Prisma ORM documentacion</a> <br>
     curso de nestJS por Fazt <a href="https://www.youtube.com/watch?v=wsqcg5ZtUMM" target="_blank"
       rel="noopener noreferrer">curso por Fazt</a> <br>
     curso de NestJS por codrr <a href="https://www.youtube.com/watch?v=X-59-aXgFH4&list=PLergODdA95kfcSoXqZZ-IDImO6YaQLYlG" target="_blank" rel="noopener noreferrer">curso nestJs por codrr</a> <br>
@@ -1827,6 +1829,27 @@
     </pre>
   </article>
 
-</body>
+  <a href="cursoNestJS.html">⏫</a>
+  <hr />
+  <h2 id="migraciones">migraciones</h2>
+  <article>
+    Estaba trabajando con SQLite y me cambié para PostgreSQL entonces tengo que eliminar las migraciones que existia
+    y crear una migracion nueva : <br>
+    <pre>
+      <code>
+        1. eliminar carpeta de migraciones
+          rm -rf prisma/migrations
+        
+        2. elimina tabla de emigracion si existe en postgresql
+          DROP TABLE IF EXISTS _prisma_migrations;
+        
+        3. Genera una nueva migración para PostgreSQL
+          npx prisma migrate dev --name init
 
-</html>
+
+
+      </code>
+    </pre>
+  </article>
+
+</body>
