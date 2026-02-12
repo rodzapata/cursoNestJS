@@ -29,6 +29,8 @@
     <li><a href="cursoNestJS.html#guards">guards</a></li>
     <li><a href="cursoNestJS.html#database">base de datos </a></li>
     <li><a href="cursoNestJS.html#backup">backup </a></li>
+    <li><a href="cursoNestJS.html#carga-masiva">carga masiva </a></li>
+    <li><a href="cursoNestJS.html#query">query en postgres </a></li>
     <li><a href="cursoNestJS.html#convenciones">convenciones en base de datos </a></li>
     <li><a href="cursoNestJS.html#sgbd">Sistema de Gestin de Base de Datos (SGBD) </a></li>
     <li><a href="cursoNestJS.html#prisma-install">prisma ORM </a></li>
@@ -1154,6 +1156,61 @@
       </code>
     </pre>
   </article>
+
+  <a href="cursoNestJS.html">⏫</a>
+  <hr />
+  <h2 id="carga-masiva">carga masiva</h2>
+  <article>
+    para importar grandes volumenes de datos se utiliza la siguiente sintasix: <br>
+    <pre>
+      <code>
+        COPY mi_tabla
+        FROM 'C:/ruta/archivo.csv'
+        WITH (
+            FORMAT csv,
+            HEADER true,
+            DELIMITER ';',
+            ENCODING 'UTF8'
+        );
+        
+      </code>
+    </pre>
+    en nuestrao caso que tengo una tabla con id automatico entonces tengo que expecificar cada columna de la siguiente forma:
+    <pre>
+      <code>
+        COPY dictionary (word, pronunciation, period_type)
+        FROM 'C:/data/dictionary.csv'
+        WITH (
+            FORMAT csv,
+            HEADER true,
+            DELIMITER ';',
+            ENCODING 'UTF8'
+        );
+
+      </code>
+    </pre>
+  </article>
+
+  <a href="cursoNestJS.html">⏫</a>
+  <hr />
+  <h2 id="query">query en postgres</h2>
+  <article>
+    Necesito un Query que me consulte a la tabla de learned_vocabulary las palabras que se encuentra en el dictionary:
+    <pre>
+      <code>
+        SELECT *
+        FROM prov p
+        WHERE EXISTS (
+            SELECT 1
+            FROM dictionary d
+            WHERE p.word ILIKE '%' || d.word || '%'
+            and d.id in (12,26)
+        );
+
+        
+      </code>
+    </pre>
+    </article>
 
   <a href="cursoNestJS.html">⏫</a>
   <hr />
