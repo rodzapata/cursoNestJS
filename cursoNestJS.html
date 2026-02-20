@@ -1929,6 +1929,20 @@
     es instalar linux dentro de window, es recomendable empezar con la distribucion Ubuntu Server (LTS), despues pasar por Debian y <br>
     finalmente para experienza cooporativas Rocky Linux que serian la version libre de Red hat. <br>
     abrimos la terminal como usuario administrador y ejecutamos: <br>
+    lo primero que vamos hacer es acualizar la ulitma version de wsl, abrimos la terminal como administrador y ejecutamos: <br>
+    <pre>
+      <code>
+        wsl --update
+      </code>
+    </pre>
+    con esto mi pc quedó actualizado con la version 2.6.3 <br>
+    si quiero saber la version de wsl que tengo instalada: <br>
+    <pre>
+      <code>
+        wsl --version
+      </code>
+    </pre>
+    proceso de instalacion: <br>
     <pre>
       <code>
         wsl --install
@@ -1942,7 +1956,116 @@
 
       </code>
     </pre>
+    si quiero saber si la version de wsl que instale con Debian es la 2 o la 1 hay que escribir:
+    <pre>
+      <code>
+        wsl --list --verbose
 
+        PS C:\Users\Ryzen> wsl --list --verbose
+        NAME      STATE           VERSION
+        * Debian    Running         2
+        PS C:\Users\Ryzen>
+
+      </code>
+    </pre>
+    si necesito entrar a mi usuario root en wsl para instalar algo en lo que me exije los permiso escribo:
+    <pre>
+      <code>
+        wsl -u root
+
+        root@PC127:/mnt/c/Users/Ryzen#
+
+      </code>
+    </pre>
+    <strong>Nota</strong> <br>
+    se recomienda dentro de visual studio code instalar la extension WSL <br>
+    tambien se recomienda dentro de WSL instalar el git de linux, reliza los commit y los push mucho mas rapido <br>
+    los permisos que debemos darle al usuario rzapata son: <br>
+    <pre>
+      <code>
+        apt update && apt install sudo curl git wget
+        usermod -aG sudo rzapata
+        
+      </code>
+      la primera linea significa verifica actualizacion de paquetes disponibles, <br>
+      los && significa si encontro actualizaciones entonces ejectute la instalacion de curl, git, wget,
+      en caso que no haya actualizaciones no ejecuta nada. <br>
+      usermod es la herramienta para cambiar permisos de usuarios donde : <br>
+      <strong>a</strong> significa añadir sin borrar grupos actuales <br>
+      <strong>G</strong> significa agregar a grupo <br>
+      con esto el esuario rzapata tiene permisos de administrador. <br>
+
+      ahora si desde nuestra terminal con el usuario rzapta se puede instalar asi:
+      <pre>
+        <code>
+          rzapata@PC127:/mnt/c/Users/Ryzen$ sudo apt update
+          
+          [sudo] password for rzapata:
+          Hit:1 http://deb.debian.org/debian trixie InRelease
+          Hit:2 http://deb.debian.org/debian trixie-updates InRelease
+          Hit:3 http://security.debian.org/debian-security trixie-security InRelease
+          Hit:4 http://ftp.debian.org/debian trixie-backports InRelease
+          26 packages can be upgraded. Run 'apt list --upgradable' to see them.
+        </code>
+      </pre>
+      instalamos curl + fish que es una terminal personalizable : <br>
+      <pre>
+        <code>
+          #instalar fish que es una terminal personalizable
+          sudo apt install curl fish
+          
+          #establece fish por defecto
+          chsh -s $(which fish)
+          
+        </code>
+      </pre>
+      ahora instalamos fiher: <br>
+      <pre>
+        <code>
+        curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source && fisher install jorgebucaran/fisher
+          
+        </code>
+      </pre>
+      nos muestra lo siguiente: <br>
+      <pre>
+        <code>
+
+          fisher install version 4.4.8
+          Fetching https://api.github.com/repos/jorgebucaran/fisher/tarball/HEAD
+          Installing jorgebucaran/fisher
+                     /home/rzapata/.config/fish/functions/fisher.fish
+                     /home/rzapata/.config/fish/completions/fisher.fish
+          Installed 1 plugin/s
+        </code>
+      </pre>
+      Para trabajar de forma más cómoda y agradable, <br>
+      también es recomendable utilizar un motor de prompts o un framework para el shell. Los más conocidos es Tide <br>
+      <pre>
+        <code>
+          fisher install IlanCosman/tide@v6
+        </code>
+      </pre>
+      para eliminar carpeta con todo su contenido sin importar que tenga informacion es : <br>
+      <pre>
+        <code>
+          rm -rf workspace
+        </code>
+      </pre>
+      <strong>Nota: problemas con git status</strong> <br>
+      cuando clone el repositorio me estaba presentado error, porque primero tenia que ubicarme en la carpeta home/rzapata <br>
+      y creamos la carpeta <strong>workspace</strong> y despues si clonamos el repositorio. <br><br>
+      <pre>
+        <code>
+          #nos muestra la ruta donde estamos ubicados dentro de linux
+          pwd 
+        </code>
+      </pre>
+      para ver la configuracion de mis variables global de git se escribe: <br>
+      <pre>
+        <code>
+          git config --global --list
+        </code>
+      </pre>
 
   </article>
 
