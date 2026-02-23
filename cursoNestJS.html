@@ -39,6 +39,8 @@
     <li><a href="cursoNestJS.html#graphQL">GraphQL </a></li>
     <li><a href="cursoNestJS.html#wsl-2">WSL 2 </a></li>
     <li><a href="cursoNestJS.html#install-postgres">install Postgresql in Linux WSL 2 </a></li>
+    <li><a href="cursoNestJS.html#config-postgres">configurar conexion Postgresql </a></li>
+    <li><a href="cursoNestJS.html#command-linux">comando tertimal linux</a></li>
   </ul>
 
 
@@ -2124,58 +2126,186 @@
     wget → herramienta para descargar archivos desde internet por terminal. <br>
     gnupg2 → herramientas de cifrado y verificación de firmas (muy usado para validar repositorios). <br>
     lsb-release → muestra información de la distribución Linux (nombre, versión, etc.). <br><br>
-    <strong>Paso 2 — Agregar repo oficial PostgreSQL</strong> <br>
+
+    <strong>Paso 2 — Importar llave</strong> <br>
     <pre>
       <code>
-        echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list
+        curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc \
+        | gpg --dearmor \
+        | sudo tee /usr/share/keyrings/postgresql.gpg > /dev/null      
+
       </code>
     </pre>
-    echo → imprime texto en la terminal. <br>
-    El texto dentro de comillas es una línea de repositorio APT. <br>
-    deb → indica que es un repositorio de paquetes binarios. <br>
-    http://apt.postgresql.org/pub/repos/apt → URL del repositorio. <br>
-    $(lsb_release -cs) → ejecuta ese comando y lo reemplaza por el codename de tu distribución: <br><br>
-
-    Ej: focal, jammy, bookworm. <br><br>
-
-    -pgdg → indica que es el repo del PostgreSQL Global Development Group. <br>
-    main → sección principal del repositorio. <br><br>
-
-    <strong>Paso 3 — Importar llave</strong> <br>
+    explicacion del comando:
     <pre>
       <code>
-        wget -qO - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+
+        curl -fsSL URL
+    
+        Función: descarga la clave pública
+    
+        Internamente:
+        abre conexión HTTPS
+        valida certificado TLS
+        descarga el archivo .asc
+    
+        lo envía a stdout (flujo estándar)
+    
+        👉 No guarda archivo en disco
+        👉 Lo manda directo al pipeline
+    
+        Pipe | 
+        El símbolo pipe hace:
+        No se crean archivos temporales.
+        Se usan buffers en memoria del kernel.
+    
+        gpg --dearmor
+    
+        Función: convertir clave ASCII → binario GPG
+    
+        Explicación técnica:
+        GPG recibe texto ASCII
+        lo parsea
+        lo transforma a formato binario OpenPGP
+
+        sudo tee /usr/share/keyrings/postgresql.gpg
+        
+        Función: guardar archivo con permisos root
+        Detalles importantes:
+        
+        tee escribe en archivo y stdout
+        sudo es necesario porque /usr/share/keyrings/ es root-only
+        el archivo se crea con permisos seguros
+
+        > /dev/null
+        
+        Esto redirige la salida de tee para que no muestre basura binaria en pantalla.
+        Sin esto verías caracteres ilegibles.
+        
       </code>
     </pre>
-    wget -qO - https://www.postgresql.org/media/keys/ACCC4CF8.asc <br>
-
-    wget → herramienta para descargar archivos desde internet. <br>
-    -q → modo silencioso (quiet), no muestra mensajes. <br>
-    -O - → indica que el archivo descargado se envíe a la salida estándar (pantalla) en vez de guardarse en un archivo.
-    <br>
-
-    La URL → es la clave pública oficial del repositorio. <br>
-    👉 Resultado: descarga la clave y la envía directamente al siguiente comando. <br><br>
-
-    | El pipe pasa la salida de wget como entrada al siguiente comando. <br><br>
-    sudo apt-key add - <br>
-
-    apt-key → herramienta para gestionar claves de confianza de repositorios APT. <br>
-    add → agrega una nueva clave. <br>
-    - → significa “leer desde entrada estándar” (lo que viene del pipe). <br>
-    sudo → necesario porque estás modificando claves del sistema. <br>
-
-    👉 Resultado: se agrega la clave al sistema para que APT pueda verificar que los paquetes del repositorio son
-    auténticos. <br><br>
 
     <strong>Nota: </strong> <br>
-    este comando ya esta depreciado y lo cambié por : <br>
+    este comando ya esta depreciado y era el que me mostraba la IA : <br>
     <pre>
       <code>
-        wget -qO - https://www.postgresql.org/media/keys/ACCC4CF8.asc \
-        | gpg --dearmor \
-        | sudo tee /usr/share/keyrings/postgresql.gpg > /dev/null        
-        
+         wget -qO - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+
+      </code>
+    </pre>
+    explicacion del comando :
+    <pre>
+      <code>
+        wget -qO - https://www.postgresql.org/media/keys/ACCC4CF8.asc <br>
+  
+        wget → herramienta para descargar archivos desde internet. <br>
+        -q → modo silencioso (quiet), no muestra mensajes. <br>
+        -O - → indica que el archivo descargado se envíe a la salida estándar (pantalla) en vez de guardarse en un archivo. <br>
+  
+        La URL → es la clave pública oficial del repositorio. <br>
+        👉 Resultado: descarga la clave y la envía directamente al siguiente comando. <br><br>
+  
+        | El pipe pasa la salida de wget como entrada al siguiente comando. <br><br>
+        sudo apt-key add - <br>
+  
+        apt-key → herramienta para gestionar claves de confianza de repositorios APT. <br>
+        add → agrega una nueva clave. <br>
+        - → significa “leer desde entrada estándar” (lo que viene del pipe). <br>
+        sudo → necesario porque estás modificando claves del sistema. <br>
+  
+        👉 Resultado: se agrega la clave al sistema para que APT pueda verificar que los paquetes del repositorio son
+        auténticos. <br><br>
+
+      </code>  
+    </pre>
+    <strong>Paso 3 — Agregar repositorio usando la clave</strong> <br>
+    <pre>
+      <code>
+         echo "deb [signed-by=/usr/share/keyrings/postgresql.gpg] http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" \
+        | sudo tee /etc/apt/sources.list.d/pgdg.list 
+      </code>
+    </pre>
+    explicancion :
+    <pre>
+      <code>
+        echo "deb ... main"
+
+        echo imprime texto.
+        Ese texto es exactamente el formato que APT usa para definir repositorios.
+
+        $(lsb_release -cs)
+
+        Esto es expansión de comando.
+
+        El sistema ejecuta:
+        lsb_release -cs
+
+        y devuelve el nombre de tu distribución.
+        Por ejemplo Ubuntu 22.04, Debian 12, etc
+
+        👉 Esto asegura que el repo coincide con tu sistema operativo.
+
+        deb [signed-by=...] URL distro main
+
+        Esta es la línea de configuración APT.
+
+        Significado:
+
+        Parte	Significado
+        deb	repositorio binario
+        [signed-by=...]	clave GPG específica
+        URL	servidor repo
+        distro-pgdg	versión distro
+        main	sección paquetes
+
+        🔐 signed-by= (IMPORTANTE)
+        [signed-by=/usr/share/keyrings/postgresql.gpg]
+
+        Esto le dice a APT:
+
+        Solo confía en paquetes firmados con esta clave.
+
+        Pipe |
+
+        Pasa la salida de echo al siguiente programa.
+        echo → tee
+
+        sudo tee /etc/apt/sources.list.d/pgdg.list
+
+        tee escribe el contenido en archivo.
+
+        ¿Por qué sudo tee y no sudo echo?
+
+        Porque redirecciones (>) no funcionan con sudo directo.
+        ✔ correcto:
+
+        echo texto | sudo tee archivo
+
+        ❌ incorrecto:
+
+        sudo echo texto > archivo
+
+        Ruta del archivo
+        /etc/apt/sources.list.d/
+
+        Esta carpeta es donde se almacenan repositorios adicionales.
+
+        APT carga automáticamente todos los .list de ahí.   
+
+        🏆 Por qué este método es el estándar moderno
+
+        Este patrón:
+
+        echo | sudo tee
+
+      </code>
+    </pre>
+
+    <strong>Nota </strong><br>
+    la IA me estaba mostrando el siguiente codigo que ya esta deprecado : <br>
+    <pre>
+      <code>
+         echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list
       </code>
     </pre>
     <strong>Paso 4 — Instalar PostgreSQL 18</strong> <br>
@@ -2261,10 +2391,37 @@
 
       </code>
     </pre>
+
+
+    <strong>Paso 3 — Agregar repo oficial PostgreSQL</strong> <br>
+    <pre>
+      <code>
+        echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list
+      </code>
+    </pre>
+    echo → imprime texto en la terminal. <br>
+    El texto dentro de comillas es una línea de repositorio APT. <br>
+    deb → indica que es un repositorio de paquetes binarios. <br>
+    http://apt.postgresql.org/pub/repos/apt → URL del repositorio. <br>
+    $(lsb_release -cs) → ejecuta ese comando y lo reemplaza por el codename de tu distribución: <br><br>
+
+    Ej: focal, jammy, bookworm. <br><br>
+
+    -pgdg → indica que es el repo del PostgreSQL Global Development Group. <br>
+    main → sección principal del repositorio. <br><br>
+
     <strong>Paso 5 — Verificamos la instalacion de PostgreSQL 18</strong> <br>
     <pre>
       <code>
         psql --version
+
+        tambien puedo entrar a postgresql
+
+        sudo -u postgres psql
+        y despues ejectutar:
+
+        SELECT version();
+
       </code>
     </pre>
     <strong>Nota </strong><br>
@@ -2275,6 +2432,134 @@
         
       </code>
     </pre>
+    
+  </article>
+    <a href="cursoNestJS.html">⏫</a>
+  <hr />
+  <h2 id="config-postgres">Configurar Postgres en linux</h2>
+  <article>
+    <pre>
+      <code>
+        1️⃣ Verificar que PostgreSQL está activo en Linux
+
+          sudo systemctl status postgresql
+      </code>
+    </pre>
+    si el servicio no aparece activo hay que iniciarlo con 
+    <pre>
+      <code>
+        sudo systemctl start postgresql
+      </code>
+    </pre>
+    para habiliar arranque automatico:
+    <pre>
+      <code>
+        sudo systemctl enable postgresql
+      </code>
+    </pre>
+    para ver el puerto de escucha se escribe:
+    <pre>
+      <code>
+        ss -nltp | grep 5432
+      </code>
+    </pre>
+    <pre>
+      <code>
+        2️⃣ Configurar PostgreSQL para conexiones remotas
+
+        Hay 2 archivos clave:
+
+        postgresql.conf	Configuración general
+        pg_hba.conf	Control de acceso
+
+        Editar postgresql.conf
+
+        Ubicación común:
+        /etc/postgresql/18/main/postgresql.conf
+
+        Buscar:
+        listen_addresses =
+
+        Cambiar a:
+        listen_addresses = '*'
+
+        Significa:
+        PostgreSQL acepta conexiones desde cualquier IP
+
+        Buena práctica en producción:
+        listen_addresses = '192.168.1.50'
+
+        (solo tu IP interna)
+
+        Editar pg_hba.conf
+
+        Archivo:
+        /etc/postgresql/18/main/pg_hba.conf
+
+        Agregar al final:
+        host    all     all     0.0.0.0/0     md5
+
+        | Campo     | Valor                      |
+        | --------- | -------------------------- |
+        | host      | conexiones remotas         |
+        | all       | todas las bases            |
+        | all       | todos los usuarios         |
+        | 0.0.0.0/0 | cualquier IP               |
+        | md5       | autenticación con password |
+
+        🔐 Más seguro:
+
+        host all all 192.168.1.0/24 md5
+        (solo red local)
+        
+      </code>
+    </pre>
+    <strong>Nota de conexion</strong> <br>
+    una vez hecho las configuraciones no me podia conectar desde windows, el error consistia en que el usuario postgres <br>
+    en linux no se le asigna password como si sucede en windows, asi que teniamos que crearle el password al usuario <br>
+    por buenas practicas a nuestra api le vamos a crear su propio usuario y password <br>
+    <pre>
+      <code>
+        Entrar a PostgreSQL:
+
+          sudo -u postgres psql
+
+        Crear usuario:
+          CREATE USER english_api WITH PASSWORD 'Clave01.';
+        
+        Crear base:
+          CREATE DATABASE english_db OWNER english_api;
+
+        Permisos extra:
+          GRANT ALL PRIVILEGES ON DATABASE english_db TO english_api;
+
+        Salir:
+          \q
+      </code>
+    </pre>
+    ahora entramos con el nuevo usuario de creamos: <br>
+    <pre>
+      <code>
+
+        sudo psql -h 127.0.0.1 -U english_api -d english_db
+
+        ojo: la -U es en mayuscula y cuando entrabamos usando el comando siguiente es minuscula
+
+        sudo -u postgres psql
+
+        la razon es porque en el primero -U es el usuario dentro de la base de datos, <br>
+        en cambio el segundo es el usuario creado en el sistemas de linux y es por eso que no pide contraseña <br>
+        linux simplemente verifica que el usuario
+      </code>
+    </pre>
+
+  </article>
+
+  <a href="cursoNestJS.html">⏫</a>
+  <hr />
+  <h2 id="command-linux">comando terminal linux</h2>
+  <article>
+
   </article>
 
 </body>
