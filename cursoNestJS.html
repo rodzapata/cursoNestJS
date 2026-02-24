@@ -2110,6 +2110,173 @@
       </pre>
 
   </article>
+
+ <a href="cursoNestJS.html">⏫</a>
+  <hr />
+  <h2 id="command-linux">comando terminal linux</h2>
+  <article>
+    a continuacion los comandos mas utilizados en linux organizado por categorias: <br>
+    <strong>1. Comando para directorios</strong> <br>
+    <strong>tree</strong> nos muestra la estructura de las capertas en forma de arbol . <br>
+    <strong>eza</strong> comando mejorado que usar ls  . <br>
+    <pre>
+      <code>
+        Nota:
+          tree, eza, en mi WSL no me funcionaba porque no esta instalado, para instalarlo hay que escribir:
+
+          sudo apt install tree
+          sudo apt install eza
+      </code>
+    </pre>
+
+    <strong>mkdir</strong> crea direciorios. <br>
+    podemos crear directorio y subdirectorio dentro usando el paramentro -p <br>
+    <pre>
+      <code>
+        mkdir -p directiorio/subdirectorio
+      </code>
+    </pre>
+    ahora queremos eliminar el directorio con su respestivo subdirectorio utilizando el parametro -rf ,<br>
+     donde la r es que sea recursivo y la f que no pida confirmacion<br>
+    <strong>rm</strong> eliminas carpetas  . <br>
+    <pre>
+      <code>
+        rm -rf directorio
+      </code>
+    </pre>
+    <strong>touch</strong> creacion de ficheros. <br>
+    <pre>
+      <code>
+        touch prueba.txt
+      </code>
+    </pre>
+    <strong>nano</strong> editamos el archivo creado. <br>
+    <pre>
+      <code>
+        nano prueba.txt
+
+        insertamos los cambios y guardamos con ctrl + O 
+        para salir del edictor usamos ctrl + X
+      </code>
+    </pre>
+    <strong>cat</strong> para ver el contenido de un fichero sin editarlo. <br>
+    <pre>
+      <code>
+        cat prueba.txt
+      </code>
+    </pre>
+    <strong>z</strong> este comando es una mejora el cd que es muy util cuando tenemos rutas lartas <br>
+    <strong>ls</strong> lista los directorios <br>
+    <pre>
+      <code>
+        ls -lh 
+
+        total 8.0K
+        -rw-r--r-- 1 rzapata rzapata   42 Feb 24 14:38 prueba.txt
+        drwxr-xr-x 3 rzapata rzapata 4.0K Feb 20 15:30 workspace/
+
+        una mejora de este comando es eza, donde nos muestra los titulos y colores
+        eza -lh
+
+        Permissions Size User    Date Modified Name
+        .rw-r--r--    42 rzapata 24 Feb 14:38  prueba.txt
+        drwxr-xr-x     - rzapata 20 Feb 15:30  workspace
+
+        y si quiero ver los icones se escribe:
+        eza -lh --icons
+
+        Permissions Size User    Date Modified Name
+        .rw-r--r--    42 rzapata 24 Feb 14:38   prueba.txt
+        drwxr-xr-x     - rzapata 20 Feb 15:30   workspace
+
+        por ultimo si deseamos ver la estructura de las carpetas usamos el parametro --tree
+        eza -lh --icons --tree
+
+        Permissions Size User    Date Modified Name
+        drwx------     - rzapata 24 Feb 14:38   .
+        .rw-r--r--    42 rzapata 24 Feb 14:38  ├──  prueba.txt
+        drwxr-xr-x     - rzapata 20 Feb 15:30  └──  workspace
+        drwxr-xr-x     - rzapata 20 Feb 15:31      └──  EnglishDeveloper
+        .rw-r--r--  2.9k rzapata 20 Feb 15:31          ├──  aleman.txt
+        .rw-r--r--  1.7k rzapata 20 Feb 15:31          ├──  Alemania.txt
+        drwxr-xr-x     - rzapata 20 Feb 15:31          ├──  api-english
+        .rw-r--r--   899 rzapata 20 Feb 15:31          │   ├──  eslint.config.mjs
+        .rw-r--r--   171 rzapata 20 Feb 15:31          │   ├──  nest-cli.json
+        .rw-r--r--  401k rzapata 20 Feb 15:31          │   ├──  package-lock.json
+        .rw-r--r--  2.1k rzapata 20 Feb 15:31          │   ├──  package.json
+        drwxr-xr-x     - rzapata 20 Feb 15:31          │   ├──  prisma
+        drwxr-xr-x     - rzapata 20 Feb 15:31          │   │   ├──  migrations
+        drwxr-xr-x     - rzapata 20 Feb 15:31          │   │   │   ├──  20260211191700_init
+        .rw-r--r--  2.9k rzapata 20 Feb 15:31          │   │   │   │   └──  migration.sql
+        .rw-r--r--   128 rzapata 20 Feb 15:31          │   │   │   └──  migration_lock.toml
+        .rw-r--r--  3.2k rzapata 20 Feb 15:31          │   │   ├──  model.sql
+        .rw-r--r--  3.3k rzapata 20 Feb 15:31          │   │   └──  schema.prisma
+        .rw-r--r--   374 rzapata 20 Feb 15:31          │   ├──  prisma.config.ts
+        
+      </code>
+    </pre>
+    <strong>mv</strong> mueve archivo <strong>origen destino</strong>  <br>
+    <pre>
+      <code>
+        si tu testino le cambias el nombres lo que hace es que renombra tu archivo de origen
+        mv prueba.txt prueba.html 
+
+      </code>
+    </pre>
+    <strong>cp</strong> copia un archivo <strong>origen destino</strong>  <br>
+    <pre>
+      <code>
+        realiza una copia de tu archivo con otro nombre, consevando el primero
+        cp prueba.txt prueba2.txt
+
+      </code>
+    </pre>
+
+    <strong>find</strong> Buscar ficheros <br>
+    si usas find en fish el nombre del fichero se coloca entre parantesis
+
+    <pre>
+      <code>
+        find -name "prue*.txt"
+
+        ./directorio/prueba2.txt
+        ./directorio/prueba.txt        
+
+      </code>
+    </pre>
+    existe un un comando llamdo <strong>fdfind </strong>Buscar fichero mas rapido y mejorado <br>
+    pero hay que instalarlo primero : <br>
+    <pre>
+      <code>
+
+        sudo apt update
+        sudo apt install fd-find
+
+        fdfind --version
+
+        fdfind prue -e txt
+
+        busca todos los archivos que contengan como nombre prue y con extension txt
+
+      </code>
+    </pre>
+    <strong>fzf</strong> Este comando buscar y filtra automaticamente y puedes moverte entre los archivos. <br>
+    <pre>
+      <code>
+        pero primero hay que instalarlo
+
+        sudo apt update
+        sudo apt install fzf
+
+        lo usamos escribiendo
+        fzf
+
+        
+      </code>
+    </pre>
+
+  </article>
+
   <a href="cursoNestJS.html">⏫</a>
   <hr />
   <h2 id="install-postgres">Install Postgresql in linux</h2>
@@ -2555,11 +2722,5 @@
 
   </article>
 
-  <a href="cursoNestJS.html">⏫</a>
-  <hr />
-  <h2 id="command-linux">comando terminal linux</h2>
-  <article>
-
-  </article>
-
+ 
 </body>
