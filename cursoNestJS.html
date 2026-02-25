@@ -41,6 +41,7 @@
     <li><a href="cursoNestJS.html#install-postgres">install Postgresql in Linux WSL 2 </a></li>
     <li><a href="cursoNestJS.html#config-postgres">configurar conexion Postgresql </a></li>
     <li><a href="cursoNestJS.html#command-linux">comando tertimal linux</a></li>
+    <li><a href="cursoNestJS.html#script">script bash</a></li>
   </ul>
 
 
@@ -80,7 +81,8 @@
     <a href="https://graphql.org/" target="_blank" rel="noopener noreferrer">GraphQL documentacion oficial</a> <br>
     bootcamp de IA <a href="https://bootcamp.manz.dev/contenido/" target="_blank" rel="noopener noreferrer">bootcamp de
       IA por manz</a> <br>
-
+    pagina oficial de OpenCode <a href="https://opencode.ai/" target="_blank" rel="noopener noreferrer">OpenCode</a> <br><br>
+    terminal de linux <a href="https://terminaldelinux.com/terminal/" target="_blank" rel="noopener noreferrer">Terminal de linux por Manz</a> <br><br>
 
 
   </article>
@@ -2165,6 +2167,43 @@
         cat prueba.txt
       </code>
     </pre>
+    <strong>less</strong> para ver el contenido de un fichero sin editarlo pero separado por paginas. <br>
+    Es usado cuando el archivo es muy largo y queremos movernos entre paginas usando las flaclas <br>
+    <pre>
+      <code>
+        cat prueba.txt
+      </code>
+    </pre>
+  
+    <strong>batcat</strong> es una mejora del comando bat, hay que instalarlo primero. <br>
+    <pre>
+      <code>
+        sudo apt update
+        sudo apt install bat
+
+        batcat prueba.txt
+
+        nos muestra las lineas, colores nos permite desplazarnos por paginas , para salir :q <br>
+
+      </code>
+    </pre>
+    <strong>grep</strong>te muestra las lineas de texto en un archivo que tenga la palabra que quermos filtrar. <br>
+    busca dentro del archivo vocabulary.txt la palabra make <br>
+    <pre>
+      <code>
+        grep make vocabulary.txt
+
+        make: hacer
+        make it an ideal language for scripting.
+        If statements are used to make decisions in code.
+        I have to make bags of ice. Necesito hacer bolsas de hielo.
+        I'd like to make an appointment with Dr. Evans, please. (Quisiera sacar una cita con el Dr. Evans, por favor).
+
+        los parametros -i ignora minuscula de mayuscula
+        
+      </code>
+    </pre>
+
     <strong>z</strong> este comando es una mejora el cd que es muy util cuando tenemos rutas lartas <br>
     <strong>ls</strong> lista los directorios <br>
     <pre>
@@ -2271,7 +2310,7 @@
         lo usamos escribiendo
         fzf
 
-        
+
       </code>
     </pre>
 
@@ -2722,5 +2761,40 @@
 
   </article>
 
+<a href="cursoNestJS.html">⏫</a>
+<hr />
+<h2 id="scripts">scripts </h2>
+  
+  <article>
+    los escrips con archivos que iternamente ejecutas varias instrucciones <br>
+    <pre>
+      <code>
+        creamos el archivo saludo
+        touch saludo
+
+        con nano creamos el archivo
+        #!/bin/bash 
+        echo "saludando"
+
+
+        y para ejecutarlo escribimos:
+        bash saludo
+
+        pero si quieres que el archivo quede como ejecutable sin necesidad de anteponer el comando bash <br>
+        hay que darles permisos de ejecucion de la siguiente forma:
+
+          chmod +x saludo
+        
+        y se ejecuta escribiendo:
+          ./saludo 
+        
+        tambien podemos hacer codigo de javascript y quedaria asi:
+        #!/bin/env node
+        console.log("saludando");
+        
+      </code>
+    </pre>
+
+  </article>
  
 </body>
