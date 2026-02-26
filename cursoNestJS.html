@@ -30,6 +30,7 @@
     <li><a href="cursoNestJS.html#database">base de datos </a></li>
     <li><a href="cursoNestJS.html#backup">backup </a></li>
     <li><a href="cursoNestJS.html#carga-masiva">carga masiva </a></li>
+    <li><a href="cursoNestJS.html#endpoint-carga-masiva">End Point de carga masiva </a></li>
     <li><a href="cursoNestJS.html#query">query en postgres </a></li>
     <li><a href="cursoNestJS.html#convenciones">convenciones en base de datos </a></li>
     <li><a href="cursoNestJS.html#sgbd">Sistema de Gestin de Base de Datos (SGBD) </a></li>
@@ -81,8 +82,10 @@
     <a href="https://graphql.org/" target="_blank" rel="noopener noreferrer">GraphQL documentacion oficial</a> <br>
     bootcamp de IA <a href="https://bootcamp.manz.dev/contenido/" target="_blank" rel="noopener noreferrer">bootcamp de
       IA por manz</a> <br>
-    pagina oficial de OpenCode <a href="https://opencode.ai/" target="_blank" rel="noopener noreferrer">OpenCode</a> <br><br>
-    terminal de linux <a href="https://terminaldelinux.com/terminal/" target="_blank" rel="noopener noreferrer">Terminal de linux por Manz</a> <br><br>
+    pagina oficial de OpenCode <a href="https://opencode.ai/" target="_blank" rel="noopener noreferrer">OpenCode</a>
+    <br><br>
+    terminal de linux <a href="https://terminaldelinux.com/terminal/" target="_blank" rel="noopener noreferrer">Terminal
+      de linux por Manz</a> <br><br>
 
 
   </article>
@@ -564,6 +567,12 @@
       nest g s prueba --no-spec
     </code>
   </pre>
+    podemos crear un CRUD basico donde incluye el controlador, modelo, Dto, entidades, etc, <br>
+    <pre>
+      <code>
+        nest g res bulk-upload --no-spec
+      </code>
+    </pre>
   </article>
 
   <a href="cursoNestJS.html">⏫</a>
@@ -1230,7 +1239,278 @@
 
       </code>
     </pre>
+
+    pero en linux el comando seria: <br>
+    <pre>
+      <code>
+        iniciamos con el usuario:
+        psql -h localhost -U english_api -d english_db
+        
+        en una sola linea
+
+        \copy dictionary (word, pronunciation, period_type) FROM '/home/rzapata/workspace/EnglishDeveloper/data/dictionary.csv' WITH (FORMAT csv, HEADER true, DELIMITER ';', ENCODING 'UTF8');
+
+      </code>
+    </pre>
+    nos muestra lo siguiente: <br>
+    <pre>
+      <code>
+        ❯ psql -h localhost -U english_api -d english_db
+        Password for user english_api:
+        psql (18.2 (Debian 18.2-1.pgdg13+1))
+        SSL connection (protocol: TLSv1.3, cipher: TLS_AES_256_GCM_SHA384, compression: off, ALPN: postgresql)
+        Type "help" for help.
+        
+        english_db=>
+        
+        english_db=> \copy dictionary (word, pronunciation, period_type) FROM '/home/rzapata/workspace/EnglishDeveloper/data/dictionary.csv' WITH (FORMAT csv, HEADER true, DELIMITER ';', ENCODING 'UTF8');
+        COPY 33
+      </code>
+    </pre>
+
   </article>
+  <a href="cursoNestJS.html">⏫</a>
+  <hr />
+  <h2 id="endpoint-carga-masiva">Endpoint Carga masiva</h2>
+  <article>
+    Por seguridad y buenas practicas no es recomendable que se realicen cargas masiva directamente desde el sevidor,    <br>
+    por eso lo que se recomienda es usar un strim y no darle permiso a los usuarios a la ruta del disco del servidor,    <br>
+    primero tenemos que instalar los siguietes paquetes:
+  <pre>
+    <code>
+      1️⃣ Instalar pg-copy-streams
+          
+      npm install pg-copy-streams
+
+      2️⃣ Asegúrate de tener también pg
+
+      npm install pg
+
+    </code>
+  </pre>
+    <strong>Creamos el recurso</strong> <br>
+    <pre>
+      <code>
+        nest g res bulk-upload --no-spec
+      </code>
+    </pre>
+    Esto crea la carpeta <strong>bulk-uplodad</strong> y procedemos a configurar el controller, service, dto, etc;<br><br>
+
+    <strong>1. services </strong> <br>
+    codigo bulk-upload.services.ts <br>
+    <pre>
+      <code>
+        import { Injectable } from '@nestjs/common';
+        import { CreateBulkUploadDto } from './dto/create-bulk-upload.dto';
+        import { UpdateBulkUploadDto } from './dto/update-bulk-upload.dto';
+        import { Client } from 'pg';
+        import * as fs from 'fs';
+        import { from as copyFrom } from 'pg-copy-streams';
+        
+        @Injectable()
+        export class BulkUploadService {
+         // constructor(private readonly prisma: PrismaService) { }
+        
+           async loadCsv(filePath: string): Promise<void> {
+            const client = new Client({
+              host: 'localhost',
+              port: 5432,
+              user: 'english_api',
+              password: 'Clave01.',
+              database: 'english_db',
+            });
+        
+            await client.connect();
+        
+            const stream = client.query(
+              copyFrom(`COPY dictionary (word, pronunciation, period_type)
+                        FROM STDIN WITH CSV HEADER DELIMITER ';' ENCODING 'UTF8'`)
+            );
+        
+            const fileStream = fs.createReadStream(filePath);
+        
+            return new Promise((resolve, reject) => {
+              fileStream
+                .pipe(stream)
+                .on('finish', async () => {
+                  await client.end();
+                  resolve();
+                })
+                .on('error', async (err) => {
+                  await client.end();
+                  reject(err);
+                });
+            });
+          }
+        }
+
+      </code>
+    </pre>
+    <strong>2. DTO para la ruta de la carga masiva </strong> <br>
+    codigo bulk-upload.dto.ts <br>
+    <pre>
+      <code>
+        import { IsString } from 'class-validator';
+        export class BulkUploadDto{
+            @IsString() 
+            filePath: string; // Ruta temporal del archivo CSV
+        }
+
+      </code>
+    </pre>
+
+    <strong>3. Controllador </strong> <br>
+    codigo bulk-upload.controller.ts <br>
+    <pre>
+      <code>
+        import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+        import { BulkUploadService } from './bulk-upload.service';
+        import { CreateBulkUploadDto } from './dto/create-bulk-upload.dto';
+        import { UpdateBulkUploadDto } from './dto/update-bulk-upload.dto';
+        import { BulkUploadDto } from './dto/bulk-upload.dto';
+        
+        @Controller('bulk-upload')
+        export class BulkUploadController {
+          constructor(private readonly bulkUploadService: BulkUploadService) {}
+        
+          @Post() async upload(@Body() dto: BulkUploadDto) { 
+            await this.bulkUploadService.loadCsv(dto.filePath); 
+            return { message: 'Carga masiva completada exitosamente' };
+           }
+        }
+
+      </code>
+    </pre>
+    para consumir el servicio desde postman escribimos: <br>
+    <pre>
+      <code>
+        html: http://localhost:3000/bulk-upload
+
+        body:
+        {
+          "filePath": "c:\\data\\dictionary.csv"
+        }
+        
+      </code>
+    </pre>
+    si la ruta de la carpeta esta en windows hay que utilizar doble \\ para separar las carpetas o si manda error <br>
+    en linux la ruta seria:
+    <pre>
+      <code>
+        {
+          "filePath": "/home/rzapata/workspace/data/EnglishDevoloper/dictionary.csv"
+        }
+
+      </code>
+    </pre>
+    lo mas recomendables es no usar rutas de los archivos, sino cargar el archivo en una carpeta temporal dentro del servidor, <br>
+    y despues desde la carpeta temporal realizamos las carga de datos <br>
+    pare esto debemos instalar los siguientes paquetes multer: <br>
+    <pre>
+      <code>
+        npm install @nestjs/platform-express multer pg pg-copy-streams
+
+        npm install --save-dev @types/express @types/multer
+
+      </code>
+    </pre>
+
+    <h2>Refactorizacion de la carga de datos</h2>
+    como no vamos usar la ruta ya no necesitariamos el dto, donde pasamos la ruta: <br>
+    <strong>1. services </strong> <br>
+    codigo bulk-upload.services.ts <br>
+    <pre>
+      <code>
+        import { Injectable } from '@nestjs/common';
+        import { Client } from 'pg';
+        import * as fs from 'fs';
+        import { from as copyFrom } from 'pg-copy-streams';
+        
+        @Injectable()
+        export class BulkUploadService {
+        
+           async loadCsv(filePath: string): Promise<void> {
+            const client = new Client({
+              host: 'localhost',
+              port: 5432,
+              user: 'english_api',
+              password: 'Clave01.',
+              database: 'english_db',
+            });
+        
+            await client.connect();
+        
+            const stream = client.query(
+              copyFrom(`COPY dictionary (word, pronunciation, period_type)
+                        FROM STDIN WITH CSV HEADER DELIMITER ';' ENCODING 'UTF8'`)
+            );
+        
+            const fileStream = fs.createReadStream(filePath);
+        
+            return new Promise((resolve, reject) => {
+              fileStream
+                .pipe(stream)
+                .on('finish', async () => {
+                  await client.end();
+                  resolve();
+                })
+                .on('error', async (err) => {
+                  await client.end();
+                  reject(err);
+                });
+            });
+          }
+        
+        }
+
+      </code>
+    </pre>
+    <strong>2. Controllador </strong> <br>
+    codigo bulk-upload.controller.ts <br>
+    <pre>
+      <code>
+        import { Controller, Post, UseInterceptors, UploadedFile } from '@nestjs/common';
+        import { FileInterceptor } from '@nestjs/platform-express';
+        import { BulkUploadService } from './bulk-upload.service';
+        import { diskStorage } from 'multer';
+        
+        @Controller('bulk-upload')
+        export class BulkUploadController {
+          constructor(private readonly bulkUploadService: BulkUploadService) { }
+        
+          @Post()
+          @UseInterceptors(FileInterceptor('file', {
+            storage: diskStorage({
+              destination: './uploads', filename: (req, file, cb) => { cb(null, Date.now() + '-' + file.originalname); },
+            }),
+          }))
+        
+        
+          async upload(@UploadedFile() file: Express.Multer.File) {
+            console.log(file); // revisa qué propiedades trae
+            await this.bulkUploadService.loadCsv(file.path);
+            return { message: 'Carga masiva completada exitosamente' };
+          }
+        }
+        
+      </code>
+    </pre>
+    <strong>Nota: </strong> <br>
+    Tambien tuve que crear la carpeta en linux donde se descar el archivo : <br>
+    <pre>
+      <code>
+        mkdir /uploads
+      </code>
+    </pre>
+    pero ahora la forma de llamrlo en postman, cambia porque en vez en el cody escogemos la pestaña <strong>form-data</strong> <br>
+    en key escribimos <strong>file</strong> <br>
+    escogemos tipo File <br>
+    en value <br>
+    escogemos <strong>dictionary.csv</strong> <br>
+
+
+  </article>
+
 
   <a href="cursoNestJS.html">⏫</a>
   <hr />
@@ -2113,14 +2393,14 @@
 
   </article>
 
- <a href="cursoNestJS.html">⏫</a>
+  <a href="cursoNestJS.html">⏫</a>
   <hr />
   <h2 id="command-linux">comando terminal linux</h2>
   <article>
     a continuacion los comandos mas utilizados en linux organizado por categorias: <br>
     <strong>1. Comando para directorios</strong> <br>
     <strong>tree</strong> nos muestra la estructura de las capertas en forma de arbol . <br>
-    <strong>eza</strong> comando mejorado que usar ls  . <br>
+    <strong>eza</strong> comando mejorado que usar ls . <br>
     <pre>
       <code>
         Nota:
@@ -2139,8 +2419,8 @@
       </code>
     </pre>
     ahora queremos eliminar el directorio con su respestivo subdirectorio utilizando el parametro -rf ,<br>
-     donde la r es que sea recursivo y la f que no pida confirmacion<br>
-    <strong>rm</strong> eliminas carpetas  . <br>
+    donde la r es que sea recursivo y la f que no pida confirmacion<br>
+    <strong>rm</strong> eliminas carpetas . <br>
     <pre>
       <code>
         rm -rf directorio
@@ -2174,7 +2454,7 @@
         cat prueba.txt
       </code>
     </pre>
-  
+
     <strong>batcat</strong> es una mejora del comando bat, hay que instalarlo primero. <br>
     <pre>
       <code>
@@ -2254,7 +2534,7 @@
         
       </code>
     </pre>
-    <strong>mv</strong> mueve archivo <strong>origen destino</strong>  <br>
+    <strong>mv</strong> mueve archivo <strong>origen destino</strong> <br>
     <pre>
       <code>
         si tu testino le cambias el nombres lo que hace es que renombra tu archivo de origen
@@ -2262,7 +2542,7 @@
 
       </code>
     </pre>
-    <strong>cp</strong> copia un archivo <strong>origen destino</strong>  <br>
+    <strong>cp</strong> copia un archivo <strong>origen destino</strong> <br>
     <pre>
       <code>
         realiza una copia de tu archivo con otro nombre, consevando el primero
@@ -2638,9 +2918,9 @@
         
       </code>
     </pre>
-    
+
   </article>
-    <a href="cursoNestJS.html">⏫</a>
+  <a href="cursoNestJS.html">⏫</a>
   <hr />
   <h2 id="config-postgres">Configurar Postgres en linux</h2>
   <article>
@@ -2651,7 +2931,7 @@
           sudo systemctl status postgresql
       </code>
     </pre>
-    si el servicio no aparece activo hay que iniciarlo con 
+    si el servicio no aparece activo hay que iniciarlo con
     <pre>
       <code>
         sudo systemctl start postgresql
@@ -2721,8 +3001,10 @@
       </code>
     </pre>
     <strong>Nota de conexion</strong> <br>
-    una vez hecho las configuraciones no me podia conectar desde windows, el error consistia en que el usuario postgres <br>
-    en linux no se le asigna password como si sucede en windows, asi que teniamos que crearle el password al usuario <br>
+    una vez hecho las configuraciones no me podia conectar desde windows, el error consistia en que el usuario postgres
+    <br>
+    en linux no se le asigna password como si sucede en windows, asi que teniamos que crearle el password al usuario
+    <br>
     por buenas practicas a nuestra api le vamos a crear su propio usuario y password <br>
     <pre>
       <code>
@@ -2761,10 +3043,10 @@
 
   </article>
 
-<a href="cursoNestJS.html">⏫</a>
-<hr />
-<h2 id="scripts">scripts </h2>
-  
+  <a href="cursoNestJS.html">⏫</a>
+  <hr />
+  <h2 id="scripts">scripts </h2>
+
   <article>
     los escrips con archivos que iternamente ejecutas varias instrucciones <br>
     <pre>
@@ -2791,10 +3073,10 @@
         tambien podemos hacer codigo de javascript y quedaria asi:
         #!/bin/env node
         console.log("saludando");
-        
+
       </code>
     </pre>
 
   </article>
- 
+
 </body>
