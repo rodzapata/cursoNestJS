@@ -41,6 +41,7 @@
     <li><a href="cursoNestJS.html#wsl-2">WSL 2 </a></li>
     <li><a href="cursoNestJS.html#install-postgres">install Postgresql in Linux WSL 2 </a></li>
     <li><a href="cursoNestJS.html#config-postgres">configurar conexion Postgresql </a></li>
+    <li><a href="cursoNestJS.html#psql">psql </a></li>
     <li><a href="cursoNestJS.html#command-linux">comando tertimal linux</a></li>
     <li><a href="cursoNestJS.html#script">script bash</a></li>
   </ul>
@@ -86,9 +87,12 @@
     <br><br>
     terminal de linux <a href="https://terminaldelinux.com/terminal/" target="_blank" rel="noopener noreferrer">Terminal
       de linux por Manz</a> <br><br>
-      bootcamp por Manz <a href="https://bootcamp.manz.dev/" target="_blank" rel="noopener noreferrer">bootcamp princial</a> <br><br>
-      indice completo del bootcampo <a href="https://www.youtube.com/watch?v=XfekLkbqFpQ&list=PLx5xbrpW6nXgISwDvrMeKuryN9U1Giqzj&index=2&t=1366s" target="_blank" rel="noopener noreferrer">inidice completo</a><br>
-      
+    bootcamp por Manz <a href="https://bootcamp.manz.dev/" target="_blank" rel="noopener noreferrer">bootcamp
+      princial</a> <br><br>
+    indice completo del bootcampo <a
+      href="https://www.youtube.com/watch?v=XfekLkbqFpQ&list=PLx5xbrpW6nXgISwDvrMeKuryN9U1Giqzj&index=2&t=1366s"
+      target="_blank" rel="noopener noreferrer">inidice completo</a><br>
+
 
 
   </article>
@@ -1276,10 +1280,12 @@
   <hr />
   <h2 id="endpoint-carga-masiva">Endpoint Carga masiva</h2>
   <article>
-    Por seguridad y buenas practicas no es recomendable que se realicen cargas masiva directamente desde el sevidor,    <br>
-    por eso lo que se recomienda es usar un strim y no darle permiso a los usuarios a la ruta del disco del servidor,    <br>
+    Por seguridad y buenas practicas no es recomendable que se realicen cargas masiva directamente desde el sevidor,
+    <br>
+    por eso lo que se recomienda es usar un strim y no darle permiso a los usuarios a la ruta del disco del servidor,
+    <br>
     primero tenemos que instalar los siguietes paquetes:
-  <pre>
+    <pre>
     <code>
       1️⃣ Instalar pg-copy-streams
           
@@ -1297,7 +1303,8 @@
         nest g res bulk-upload --no-spec
       </code>
     </pre>
-    Esto crea la carpeta <strong>bulk-uplodad</strong> y procedemos a configurar el controller, service, dto, etc;<br><br>
+    Esto crea la carpeta <strong>bulk-uplodad</strong> y procedemos a configurar el controller, service, dto,
+    etc;<br><br>
 
     <strong>1. services </strong> <br>
     codigo bulk-upload.services.ts <br>
@@ -1406,7 +1413,8 @@
 
       </code>
     </pre>
-    lo mas recomendables es no usar rutas de los archivos, sino cargar el archivo en una carpeta temporal dentro del servidor, <br>
+    lo mas recomendables es no usar rutas de los archivos, sino cargar el archivo en una carpeta temporal dentro del
+    servidor, <br>
     y despues desde la carpeta temporal realizamos las carga de datos <br>
     pare esto debemos instalar los siguientes paquetes multer: <br>
     <pre>
@@ -1505,7 +1513,8 @@
         mkdir /uploads
       </code>
     </pre>
-    pero ahora la forma de llamrlo en postman, cambia porque en vez en el cody escogemos la pestaña <strong>form-data</strong> <br>
+    pero ahora la forma de llamrlo en postman, cambia porque en vez en el cody escogemos la pestaña
+    <strong>form-data</strong> <br>
     en key escribimos <strong>file</strong> <br>
     escogemos tipo File <br>
     en value <br>
@@ -3045,6 +3054,29 @@
     </pre>
 
   </article>
+
+  <a href="cursoNestJS.html">⏫</a>
+  <hr />
+  <h2 id="psql">psql</h2>
+  <article>
+    psql es la consola interna de postgress donde podemos escribir las sentencias sql: <br>
+    <strong>1. listar las bases de datos que tengo en el servidor</strong> <br>
+    <pre>
+      <code>
+        entro al postgres desde wsl 
+          sudo -u postgres psql
+
+          \
+          o tambien
+          \list
+
+          para salir de la consola:
+          \q
+
+      </code>
+    </pre>
+  </article>
+
 
   <a href="cursoNestJS.html">⏫</a>
   <hr />
