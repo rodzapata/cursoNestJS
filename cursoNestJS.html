@@ -44,6 +44,9 @@
     <li><a href="cursoNestJS.html#psql">psql </a></li>
     <li><a href="cursoNestJS.html#command-linux">comando tertimal linux</a></li>
     <li><a href="cursoNestJS.html#script">script bash</a></li>
+    <li><a href="cursoNestJS.html#pnpm">instalacion de PNPM y Node en linuxs</a></li>
+    <li><a href="cursoNestJS.html#carpetas">estructura de carpetas</a></li>
+    <li><a href="cursoNestJS.html#live-server">Live server</a></li>
   </ul>
 
 
@@ -92,6 +95,8 @@
     indice completo del bootcampo <a
       href="https://www.youtube.com/watch?v=XfekLkbqFpQ&list=PLx5xbrpW6nXgISwDvrMeKuryN9U1Giqzj&index=2&t=1366s"
       target="_blank" rel="noopener noreferrer">inidice completo</a><br>
+    pagina oficial de node <a href="https://nodejs.org/en" target="_blank" rel="noopener noreferrer">Node pagina oficial</a><br>|
+    pagina ofical de pnpm <a href="https://pnpm.io/es/installation" target="_blank" rel="noopener noreferrer">pagian ofical de PNPM</a> <br>
 
 
 
@@ -3112,6 +3117,169 @@
       </code>
     </pre>
 
+  </article>
+  <a href="cursoNestJS.html">⏫</a>
+  <hr />
+  <h2 id="pnpm">PNPM </h2>
+  <article>
+    Gestor de paquetes PNPM que actulmente es el mas recomendado <br>
+    <pre>
+      <code>
+        #descargamos e inslamos pnpm desde la pagina oficial
+
+        curl -fsSL https://get.pnpm.io/install.sh | sh -
+        pnpm --version
+
+        -f si hay un error http 404 , 500, no muestra el contenido HTML del error. 
+        -s silencioso no muestra la barra de herramientas
+        -S si falla muestra los errores
+        -L redirecciona de manera automaticamente 
+
+        #instalamos Node LTS 
+        pnpm env use --global lts
+        pnpm --version
+
+        #Para ver los etorno de node que tengo instalado
+        pnpm env list
+
+        #si quiero instalr una version de node especifica escribo:
+        pnpm env use -global 25.0.0 
+
+        y para cambiar de version de node por ejemplo 22.0.0
+        pnpm env use -global 20.0.0 
+
+
+        #si quiero ver las versiones de Node que estan disponible en internet
+        pnpm env list --remote
+
+
+        ahora si nada mas quiero ver las ultimas 10 seria:
+        pnpm env list --remote | tail -10 
+
+        y si quiero ver las primeras 10 seria:
+        pnpm env list --remote | head -10  
+
+
+
+      </code>
+    </pre>
+    segun la IA pnpm no controla adecuadamente las versiones de node, que el coordina son las dependencias, recomiendas instalar volta <br>
+    desistalamos primero pnpm y node <br>:
+    <pre>
+      <code>
+        # 1. desistalamos primero Node 24.14.0 que es la version lts que me instalo
+        pnpm env remove --global 24.14.0
+
+        # 2. para desistalar pnpm tenemos que borrar la carpeta donde se instalo 
+        echo $PNPM_HOME
+
+        /home/rzapata/.local/share/pnpm
+
+        rm -rf /home/rzapata/.local/share/pnpm
+
+
+
+      </code>
+    </pre>
+    <pre>
+      <code>
+        # 1. instalar volta
+        curl https://get.volta.sh | bash
+        source ~/.bashrc
+
+        # 2. Instalar Node con Volta
+        volta install node@24
+
+        para la version lts que es la recomendada se escribe simplemente node
+        volta install node 
+
+        # 3. instalar pnpm con volta 
+        volta install pnpm 
+
+        Esto asegura que pnpm quede fijado en tu entorno, igual que Node.
+        Si trabajas en equipo, todos tendrán la misma versión de pnpm automáticamente.
+        No necesitas usar npm install -g pnpm, porque Volta lo gestiona directamente.
+
+        #4. usar pnpm en tus proyectos
+        pnpm install
+        pnpm run dev
+
+        Volta detecta el package.json y aplica las versiones correctas de Node y pnpm sin que tengas que cambiar nada manualmente.
+
+        la versione que quedaron instaladas son:
+        pnpm --version
+        10.30.3
+
+        node --version
+        v24.14.0
+
+        volta --version
+        2.0.2
+
+
+        
+      </code>
+    </pre>
+
+  </article>
+  
+  <a href="cursoNestJS.html">⏫</a>
+  <hr />
+  <h2 id="carpetas">estructura de carpetas </h2>
+  <article>
+    crearemo una estrucura de carpeta basica de un proyecto:
+    <pre>
+      <code>
+        cd workspace
+        mkdir -p project-name/src
+        cd project-name 
+        pnpm init 
+        touch {README.md, .gitignore}
+        touch src/index.{html, css, js}
+        
+      </code>
+    </pre>
+    estructura 2
+    <pre>
+      <code>
+        cd workspace
+        mkdir -p project-name/src/{assets,css,modules}
+        cd project-name 
+        pnpm init 
+        mkdir -p src/assets/{fonts,images}
+        touch {README.md, .gitignore}
+        touch src/css/global.css 
+        touch src/{main.js, index.html}
+
+        tree -a
+      </code>
+    </pre>
+  </article>
+  
+  <a href="cursoNestJS.html">⏫</a>
+  <hr />
+  <h2 id="live-server">live server </h2>
+  <article>
+    se recomienda no usar live-server como extension de visua studio code, sino usarlo directamente desde la terminal  <br>
+    por sonsiguiente trabajaremos con un servicio local  <br>
+    <pre>
+      <code>
+        pudes escoger entre 3 opciones de servido:
+        opcion 1 servor
+        pnpm add servor
+
+        opcion 2 live-server 
+
+        opcion 3 vite 
+        
+
+        para ejcutar nuestro server 
+        cd project-name  
+
+        pnpx servor src/ index.html 1234 --reload
+
+      </code>
+    </pre>
   </article>
 
 </body>
