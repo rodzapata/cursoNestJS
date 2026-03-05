@@ -47,6 +47,7 @@
     <li><a href="cursoNestJS.html#pnpm">instalacion de PNPM y Node en linuxs</a></li>
     <li><a href="cursoNestJS.html#carpetas">estructura de carpetas</a></li>
     <li><a href="cursoNestJS.html#live-server">Live server</a></li>
+    <li><a href="cursoNestJS.html#IA">IA Inteligencia Artificial</a></li>
   </ul>
 
 
@@ -97,6 +98,7 @@
       target="_blank" rel="noopener noreferrer">inidice completo</a><br>
     pagina oficial de node <a href="https://nodejs.org/en" target="_blank" rel="noopener noreferrer">Node pagina oficial</a><br>|
     pagina ofical de pnpm <a href="https://pnpm.io/es/installation" target="_blank" rel="noopener noreferrer">pagian ofical de PNPM</a> <br>
+    paso a paso con Manz <a href="https://www.youtube.com/watch?v=1t0Z5mn2EaY&list=PLx5xbrpW6nXhrxrQm9YImBgwchsNfJkCw" target="_blank" rel="noopener noreferrer">paso a paso</a> <br>
 
 
 
@@ -3271,7 +3273,7 @@
         opcion 2 live-server 
 
         opcion 3 vite 
-        
+
 
         para ejcutar nuestro server 
         cd project-name  
@@ -3280,6 +3282,141 @@
 
       </code>
     </pre>
+    dentro del package.json en la opcion de script, creamos una variable puede ser start:dev <br>
+    <pre>
+      <code>
+        {
+          "name": "project-name",
+          "version": "1.0.0",
+          "description": "",
+          "main": "index.js",
+          "scripts": {
+            "test": "echo \"Error: no test specified\" && exit 1",
+            "start:dev": "pnpx servor src/ index.html 1234 --reload"
+          },
+          "keywords": [],
+          "author": "",
+          "license": "ISC",
+          "packageManager": "pnpm@10.30.3"
+        }
+
+      </code>
+    </pre>
+    para ejecutarlo entonces seria:
+    <pre>
+      <code>
+        pnpm run start:dev
+      </code>
+    </pre>
   </article>
 
+    <a href="cursoNestJS.html">⏫</a>
+  <hr />
+  <h2 id="IA">IA insteligencia Artificial </h2>
+  <article>
+  <pre>
+    <code>
+
+      Dentro de la IA existen muchas ramas:
+      
+      Machine Learning (aprendizaje automático)
+      
+      Deep Learning
+      
+      Visión por computadora
+      
+      Procesamiento de lenguaje natural (NLP)
+      
+      Robótica
+
+    </code>
+  </pre>
+  <strong>LLM</strong><br>
+  <pre>
+    <code>
+      
+      ¿Qué es un LLM?
+      
+      LLM significa Large Language Model (Modelo de Lenguaje Grande).
+      
+      Es un tipo específico de IA especializado en entender y generar texto humano.
+      
+      Un LLM:
+      
+      Predice la siguiente palabra en una frase
+      Responde preguntas
+      Traduce
+      Resume textos
+      Genera código
+      Mantiene conversaciones
+      
+      Ejemplos de LLM:
+      
+      GPT-4
+      Claude
+      Gemini
+      LLaMA
+
+    </code>
+  </pre>
+  <strong>Como funciona el LLM</strong><br>
+  <pre>
+    <code>
+      ¿Cómo funciona un LLM técnicamente?
+      
+      Muy simplificado:
+      
+      Se entrena con millones o billones de textos.
+      Aprende patrones del lenguaje.
+      Usa redes neuronales profundas (transformers).
+      Cuando escribes algo, predice la siguiente palabra probable.
+      
+      Lo hace miles de veces por segundo.
+      
+      No “piensa” como humano.
+      No “entiende” como humano.
+      Predice probabilidades matemáticas.
+
+    </code>
+  </pre>
+  Que se debe aprender con la IA <br>
+  <pre>
+    <code>
+      Lo profesional hoy (2026) es usar:
+
+      ✅ RAG (Retrieval Augmented Generation)
+      
+      ✅ Model Context Protocol (MCP)
+      
+      ✅ Agentes con acceso a filesystem    
+      
+      Opción 1 — RAG con tu código local (Recomendado)
+
+      Flujo:
+      
+      Tomas tu carpeta local /examples
+      Divides los archivos en chunks
+      Los conviertes en embeddings
+      Los guardas en una base vectorial
+      Cuando pides generar código:
+      Se buscan ejemplos similares
+      Se inyectan en el prompt
+      El modelo genera siguiendo ese patrón
+
+      🧱 Proceso real paso a paso
+      1️⃣ Organiza tu carpeta base
+      /react-standards
+        /components
+        /hooks
+        /services
+        /patterns
+        architecture.md
+        conventions.md
+
+      2️⃣ Crea un prompt maestro (System Prompt)
+      Aquí viene lo que me pediste 👇  
+      
+    </code>
+  </pre>
+  </article>
 </body>
